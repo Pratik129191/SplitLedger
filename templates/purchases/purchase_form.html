@@ -1,0 +1,95 @@
+{% extends "layouts/app_layout.html" %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block page_content %}
+
+    <div class="card section-card">
+
+        <h4 class="mb-4">
+            {{ title }}
+        </h4>
+
+        <form method="post">
+
+            {% csrf_token %}
+
+            <div class="row g-4">
+
+                <div class="col-md-4">
+                    <label>Company</label>
+                    {{ form.company }}
+                </div>
+
+                <div class="col-md-4">
+                    <label>Vendor</label>
+                    {{ form.vendor }}
+                </div>
+
+                <div class="col-md-4">
+                    <label>Notes</label>
+                    {{ form.notes }}
+                </div>
+
+            </div>
+
+            <hr>
+
+            {{ item_formset.management_form }}
+
+            <table class="table">
+
+                <thead>
+
+                <tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Rate</th>
+                    <th>Delete</th>
+                </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for row in item_formset %}
+
+                    <tr>
+
+                        <td>
+                            {{ row.company_product }}
+                        </td>
+
+                        <td>
+                            {{ row.quantity }}
+                        </td>
+
+                        <td>
+                            {{ row.rate }}
+                        </td>
+
+                        <td>
+                            {% if row.DELETE %}
+                                {{ row.DELETE }}
+                            {% endif %}
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+            <button class="btn btn-primary">
+                Save Purchase
+            </button>
+
+        </form>
+
+    </div>
+
+{% endblock %}

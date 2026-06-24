@@ -1,0 +1,127 @@
+{% extends "layouts/app_layout.html" %}
+
+{% block title %}
+    Company Details
+{% endblock %}
+
+{% block page_content %}
+
+    {% include "components/page_header.html" with title=company.name subtitle="Company information" %}
+
+    <div class="card section-card">
+
+        <div class="row">
+
+            <div class="col-md-6">
+
+                <h6>Name</h6>
+
+                <p>
+
+                    {{ company.name }}
+
+                </p>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <h6>Legal Name</h6>
+
+                <p>
+
+                    {{ company.legal_name|default:"-" }}
+
+                </p>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <h6>Phone</h6>
+
+                <p>
+
+                    {{ company.phone|default:"-" }}
+
+                </p>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <h6>Email</h6>
+
+                <p>
+
+                    {{ company.email|default:"-" }}
+
+                </p>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <h6>Created</h6>
+
+                <p>
+
+                    {{ company.created_at }}
+
+                </p>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <h6>Status</h6>
+
+                <p>
+
+                    {% if company.is_active %}
+
+                        <span class="badge bg-success">
+
+                        Active
+
+                    </span>
+
+                    {% else %}
+
+                        <span class="badge bg-danger">
+
+                        Inactive
+
+                    </span>
+
+                    {% endif %}
+
+                </p>
+
+            </div>
+
+        </div>
+
+        <hr>
+
+        <a href="{% url 'companies:company_update' company.id %}"
+           class="btn btn-primary">
+
+            <i class="bi bi-pencil"></i>
+
+            Edit
+
+        </a>
+
+        <a href="{% url 'companies:company_delete' company.id %}"
+           class="btn btn-danger">
+
+            <i class="bi bi-trash"></i>
+
+            Deactivate
+
+        </a>
+
+    </div>
+
+{% endblock %}

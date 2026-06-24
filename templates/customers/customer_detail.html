@@ -1,0 +1,49 @@
+{% extends "layouts/app_layout.html" %}
+
+{% block title %}
+    Customer Details
+{% endblock %}
+
+{% block page_content %}
+
+    {% include "components/page_header.html" with title=customer.name subtitle="Customer information" %}
+
+    <div class="card section-card">
+
+        <div class="row">
+
+            {% include "components/detail_item.html" with label="Name" value=customer.name %}
+            {% include "components/detail_item.html" with label="Phone" value=customer.phone %}
+            {% include "components/detail_item.html" with label="Email" value=customer.email %}
+            {% include "components/detail_item.html" with label="Address" value=customer.address %}
+            {% include "components/detail_item.html" with label="Notes" value=customer.notes col="col-md-12" %}
+
+            {% include "components/detail_item.html" with label="Total Sales" value=customer.total_sales_amount %}
+            {% include "components/detail_item.html" with label="Total Received" value=customer.total_received_amount %}
+            {% include "components/detail_item.html" with label="Outstanding" value=customer.outstanding_amount %}
+
+        </div>
+
+        <hr>
+
+        <div class="detail-actions">
+
+            <a href="{% url 'customers:customer_update' customer.id %}"
+               class="btn btn-primary">
+                Edit
+            </a>
+
+            <a href="{% url 'customers:customer_ledger' customer.id %}"
+               class="btn btn-success">
+                Ledger
+            </a>
+
+            <a href="{% url 'customers:customer_list' %}"
+               class="btn btn-light">
+                Back
+            </a>
+
+        </div>
+
+    </div>
+{% endblock %}

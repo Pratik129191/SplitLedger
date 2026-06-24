@@ -1,0 +1,30 @@
+.form-control,
+.form-select {
+    border-radius: var(--sl-radius-sm);
+    border: 1px solid var(--sl-border);
+    background: var(--sl-surface);
+    color: var(--sl-text);
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--sl-primary);
+    box-shadow: none;
+}
+
+.topbar-search input {
+    border: none;
+    outline: none;
+    background: transparent;
+    color: var(--sl-text);
+    width: 100%;
+}
+
+.topbar-search input::placeholder {
+    color: var(--sl-text-muted);
+}
+
+label.form-label {
+    font-weight: 600;
+    margin-bottom: 8px;
+}

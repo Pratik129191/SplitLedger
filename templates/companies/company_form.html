@@ -1,0 +1,80 @@
+{% extends "layouts/app_layout.html" %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block page_content %}
+
+    {% include "components/page_header.html" with title=title subtitle="Manage company information" %}
+
+    <div class="card section-card">
+
+        <form method="post">
+
+            {% csrf_token %}
+
+            <div class="row g-4">
+
+                <div class="col-md-6">
+
+                    <label class="form-label">
+                        Company Name
+                    </label>
+
+                    {{ form.name }}
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <label class="form-label">
+                        Legal Name
+                    </label>
+
+                    {{ form.legal_name }}
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <label class="form-label">
+                        Phone
+                    </label>
+
+                    {{ form.phone }}
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <label class="form-label">
+                        Email
+                    </label>
+
+                    {{ form.email }}
+
+                </div>
+
+            </div>
+
+            <hr>
+
+            <button class="btn btn-primary">
+
+                Save Company
+
+            </button>
+
+            <a href="{% url 'companies:company_list' %}"
+               class="btn btn-light">
+
+                Cancel
+
+            </a>
+
+        </form>
+
+    </div>
+
+{% endblock %}

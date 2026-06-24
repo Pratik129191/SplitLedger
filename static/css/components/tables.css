@@ -1,0 +1,21 @@
+.table {
+    margin-bottom: 0;
+    color: var(--sl-text);
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+.table th {
+    font-weight: 600;
+    color: var(--sl-text-secondary);
+}
+
+.table-card {
+    overflow: hidden;
+}
+
+.table thead {
+    border-bottom: 1px solid var(--sl-border);
+}

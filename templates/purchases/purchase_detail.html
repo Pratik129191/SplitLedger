@@ -1,0 +1,190 @@
+{% extends "layouts/app_layout.html" %}
+
+{% block title %}
+    Purchase Details
+{% endblock %}
+
+{% block page_content %}
+
+    {% include "components/page_header.html" with title="Purchase Details" subtitle=purchase.invoice_number %}
+
+    <div class="card section-card mb-4">
+
+        <div class="row">
+
+            <div class="col-md-4">
+                <h6>Invoice Number</h6>
+                <p>
+                    {{ purchase.invoice_number }}
+                </p>
+            </div>
+
+            <div class="col-md-4">
+                <h6>Company</h6>
+                <p>
+                    {{ purchase.company.name }}
+                </p>
+            </div>
+
+            <div class="col-md-4">
+                <h6>Vendor</h6>
+                <p>
+                    {{ purchase.vendor.name }}
+                </p>
+            </div>
+
+            <div class="col-md-4">
+                <h6>Purchase Date</h6>
+                <p>
+                    {{ purchase.created_at }}
+                </p>
+            </div>
+
+            <div class="col-md-4">
+                <h6>Total Amount</h6>
+                <p>
+                    ₹ {{ purchase.total_amount }}
+                </p>
+            </div>
+
+            <div class="col-md-4">
+                <h6>Paid Amount</h6>
+                <p>
+                    ₹ {{ purchase.paid_amount }}
+                </p>
+            </div>
+
+            <div class="col-md-4">
+                <h6>Outstanding Amount</h6>
+                <p>
+                    ₹ {{ purchase.outstanding_amount }}
+                </p>
+            </div>
+
+            <div class="col-md-4">
+                <h6>Status</h6>
+
+                {% if purchase.status == "CANCELLED" %}
+                    <span class="badge bg-danger">
+        Cancelled
+    </span>
+
+                {% elif purchase.outstanding_amount > 0 %}
+                    <span class="badge bg-warning">
+        Due
+    </span>
+
+                {% else %}
+                    <span class="badge bg-success">
+        Paid
+    </span>
+                {% endif %}
+
+            </div>
+
+            <div class="col-md-12">
+                <h6>Notes</h6>
+                <p>
+                    {{ purchase.notes|default:"-" }}
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="card section-card">
+
+        <div class="section-header">
+            <h5>
+                Purchase Items
+            </h5>
+        </div>
+
+        <table class="table align-middle">
+
+            <thead>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Rate</th>
+                <th>Total</th>
+            </tr>
+            </thead>
+
+            <tbody>
+
+            {% for item in purchase.items.all %}
+
+                <tr>
+
+                    <td>
+                        {{ item.company_product.product_master.name }}
+                    </td>
+
+                    <td>
+                        {{ item.quantity }}
+                    </td>
+
+                    <td>
+                        ₹ {{ item.rate_snapshot }}
+                    </td>
+
+                    <td>
+                        ₹ {{ item.amount_snapshot }}
+                    </td>
+
+                </tr>
+
+            {% empty %}
+
+                <tr>
+
+                    <td colspan="4"
+                        class="text-center text-secondary">
+
+                        No items found.
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+        <hr>
+
+        <a
+                href="{% url 'purchases:purchase_settlement' purchase.id %}"
+                class="btn btn-success">
+
+            Settlement
+
+        </a>
+        <a
+                href="{% url 'purchases:purchase_update' purchase.id %}"
+                class="btn btn-primary">
+            Edit Purchase
+        </a>
+
+        <a
+                href="{% url 'purchases:purchase_cancel' purchase.id %}"
+                class="btn btn-danger">
+            Cancel Purchase
+        </a>
+
+        <a
+                href="{% url 'purchases:purchase_list' %}"
+                class="btn btn-light">
+
+            Back
+
+        </a>
+
+    </div>
+
+{% endblock %}

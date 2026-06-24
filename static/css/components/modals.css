@@ -1,0 +1,6 @@
+.modal-content {
+    background: var(--sl-surface);
+    border: none;
+    border-radius: 20px;
+    box-shadow: var(--sl-shadow);
+}

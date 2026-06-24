@@ -1,0 +1,17 @@
+.pagination .page-link {
+    border: none;
+    color: var(--sl-text);
+    background: var(--sl-surface);
+    border-radius: 12px;
+    margin: 0 4px;
+    box-shadow: var(--sl-shadow);
+}
+
+.pagination .active .page-link {
+    background: var(--sl-primary);
+    color: white;
+}
+
+.pagination .page-link:hover {
+    background: var(--sl-surface-hover);
+}

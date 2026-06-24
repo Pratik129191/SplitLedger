@@ -1,0 +1,9 @@
+.search-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--sl-surface);
+    padding: 14px 18px;
+    border-radius: 14px;
+    box-shadow: var(--sl-shadow);
+}

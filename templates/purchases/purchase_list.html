@@ -1,0 +1,125 @@
+{% extends "layouts/app_layout.html" %}
+
+{% block title %}
+    Purchases
+{% endblock %}
+
+{% block page_content %}
+
+    {% url 'purchases:purchase_create' as purchase_create_url %}
+
+    {% include "components/page_header.html" with title="Purchases" subtitle="Manage all purchases" button_text="New Purchase" button_url=purchase_create_url %}
+
+    {% include "components/search_filter_bar.html" %}
+
+    <div class="card section-card">
+
+        <table class="table align-middle">
+
+            <thead>
+            <tr>
+                <th>Invoice</th>
+                <th>Company</th>
+                <th>Vendor</th>
+                <th>Total</th>
+                <th>Paid</th>
+                <th>Due</th>
+                <th>Status</th>
+                <th class="text-center">
+                    Actions
+                </th>
+            </tr>
+            </thead>
+
+            <tbody>
+
+            {% for purchase in purchases %}
+
+                <tr>
+
+                    <td>
+                        {{ purchase.invoice_number }}
+                    </td>
+
+                    <td>
+                        {{ purchase.company.name }}
+                    </td>
+
+                    <td>
+                        {{ purchase.vendor.name }}
+                    </td>
+
+                    <td>
+                        ₹ {{ purchase.total_amount }}
+                    </td>
+
+                    <td>
+                        ₹ {{ purchase.paid_amount }}
+                    </td>
+
+                    <td>
+                        ₹ {{ purchase.outstanding_amount }}
+                    </td>
+
+                    <td>
+
+                        {% if purchase.outstanding_amount > 0 %}
+
+                            <span class="badge bg-warning">
+                                Due
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge bg-success">
+                                Paid
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td class="text-center">
+
+                        <a
+                                href="{% url 'purchases:purchase_detail' purchase.id %}"
+                                class="btn btn-sm btn-light">
+
+                            View
+
+                        </a>
+
+                        <a
+                                href="{% url 'purchases:purchase_settlement' purchase.id %}"
+                                class="btn btn-sm btn-success">
+
+                            Settlement
+
+                        </a>
+
+                    </td>
+
+                </tr>
+
+            {% empty %}
+
+                <tr>
+
+                    <td colspan="8"
+                        class="text-center text-secondary">
+
+                        No purchases found.
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+{% endblock %}

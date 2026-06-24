@@ -1,0 +1,86 @@
+{% extends "layouts/app_layout.html" %}
+
+{% block title %}
+    Vendors
+{% endblock %}
+
+{% block page_content %}
+
+    {% url 'vendors:vendor_create' as vendor_create_url %}
+
+    {% include "components/page_header.html" with title="Vendors" subtitle="Manage all vendors" button_text="Add Vendor" button_url=vendor_create_url %}
+
+    {% include "components/search_filter_bar.html" %}
+
+    <div class="card section-card">
+
+        <table class="table align-middle">
+
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Outstanding</th>
+                <th class="text-center">Actions</th>
+            </tr>
+            </thead>
+
+            <tbody>
+
+            {% for vendor in vendors %}
+
+                <tr>
+
+                    <td>{{ vendor.name }}</td>
+
+                    <td>{{ vendor.phone }}</td>
+
+                    <td>{{ vendor.email }}</td>
+
+                    <td>
+                        ₹ {{ vendor.outstanding_amount }}
+                    </td>
+
+                    <td class="text-center">
+
+                        <a
+                                href="{% url 'vendors:vendor_detail' vendor.id %}"
+                                class="btn btn-sm btn-light">
+                            View
+                        </a>
+
+                        <a
+                                href="{% url 'vendors:vendor_update' vendor.id %}"
+                                class="btn btn-sm btn-primary">
+                            Edit
+                        </a>
+
+                        <a
+                                href="{% url 'vendors:vendor_ledger' vendor.id %}"
+                                class="btn btn-sm btn-success">
+                            Ledger
+                        </a>
+
+                    </td>
+
+                </tr>
+
+            {% empty %}
+
+                <tr>
+                    <td colspan="5"
+                        class="text-center text-secondary">
+                        No vendors found.
+                    </td>
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+{% endblock %}

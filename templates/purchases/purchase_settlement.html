@@ -1,0 +1,138 @@
+{% extends "layouts/app_layout.html" %}
+
+{% block title %}
+    Purchase Settlement
+{% endblock %}
+
+{% block page_content %}
+
+    {% include "components/page_header.html" with title="Purchase Settlement" subtitle=purchase.invoice_number %}
+
+    <div class="row g-4">
+
+        <div class="col-lg-4">
+
+            <div class="card section-card">
+
+                <div class="section-header">
+                    <h5>
+                        Purchase Summary
+                    </h5>
+                </div>
+
+                <div class="mb-3">
+                    <small class="text-secondary">
+                        Total Amount
+                    </small>
+
+                    <h4>
+                        ₹ {{ purchase.total_amount }}
+                    </h4>
+                </div>
+
+                <div class="mb-3">
+                    <small class="text-secondary">
+                        Already Paid
+                    </small>
+
+                    <h4 class="text-success">
+                        ₹ {{ purchase.paid_amount }}
+                    </h4>
+                </div>
+
+                <div>
+                    <small class="text-secondary">
+                        Outstanding
+                    </small>
+
+                    <h3 class="text-danger">
+                        ₹ {{ purchase.outstanding_amount }}
+                    </h3>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-lg-8">
+
+            <div class="card section-card">
+
+                <div class="section-header">
+                    <h5>
+                        Record Payment
+                    </h5>
+                </div>
+
+                <form method="post">
+
+                    {% csrf_token %}
+
+                    <div class="row g-4">
+
+                        <div class="col-md-6">
+
+                            <label class="form-label">
+                                Amount Paid
+                            </label>
+
+                            {{ form.amount }}
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <label class="form-label">
+                                Payment Method
+                            </label>
+
+                            {{ form.payment_mode }}
+
+                        </div>
+
+                        <div class="col-md-12">
+
+                            <label class="form-label">
+                                Reference Number
+                            </label>
+
+                            {{ form.reference_number }}
+
+                        </div>
+
+                        <div class="col-md-12">
+
+                            <label class="form-label">
+                                Notes
+                            </label>
+
+                            {{ form.remarks }}
+
+                        </div>
+
+                    </div>
+
+                    <hr>
+
+                    <a href="{% url 'purchases:purchase_settlement' purchase.id %}" class="btn btn-success">
+
+                        Save Payment
+
+                    </a>
+
+                    <a href="{% url 'purchases:purchase_detail' purchase.id %}" class="btn btn-light">
+
+                        Cancel
+
+                    </a>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}

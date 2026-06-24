@@ -1,0 +1,71 @@
+{% extends "layouts/app_layout.html" %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block page_content %}
+
+    {% include "components/page_header.html" with title=title subtitle="Manage product information" %}
+
+    <div class="card section-card">
+
+        <form method="post">
+
+            {% csrf_token %}
+
+            <div class="row g-4">
+
+                <div class="col-md-6">
+                    <label class="form-label">
+                        Company
+                    </label>
+                    {{ form.company }}
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">
+                        Name
+                    </label>
+                    {{ form.name }}
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">
+                        Unit
+                    </label>
+                    {{ form.unit }}
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">
+                        Selling Price
+                    </label>
+                    {{ form.selling_price }}
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label">
+                        Description
+                    </label>
+                    {{ form.description }}
+                </div>
+
+            </div>
+
+            <hr>
+
+            <button class="btn btn-primary">
+                Save Product
+            </button>
+
+            <a href="{% url 'products:product_list' %}"
+               class="btn btn-light">
+                Cancel
+            </a>
+
+        </form>
+
+    </div>
+
+{% endblock %}

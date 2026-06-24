@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Login
+{% endblock %}
+
+{% block content %}
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-5">
+                <div class="card section-card">
+                    <div class="mb-4">
+                        <h3>Sign In</h3>
+                        <div class="text-secondary">
+                            Login to your SplitLedger account
+                        </div>
+                    </div>
+
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <div class="mb-4">
+                            <label class="form-label">
+                                Email
+                            </label>
+                            {{ form.email }}
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">
+                                Password
+                            </label>
+                            {{ form.password }}
+                        </div>
+
+                        <button class="btn btn-primary w-100">
+                            Login
+                        </button>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

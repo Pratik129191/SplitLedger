@@ -1,0 +1,107 @@
+{% extends "layouts/app_layout.html" %}
+
+{% block title %}
+    Companies
+{% endblock %}
+
+{% block page_content %}
+    {% url 'companies:company_create' as company_create_url %}
+    {% include "components/page_header.html" with title="Companies" subtitle="Manage all companies" button_text="Add Company" button_url=company_create_url %}
+
+    {% include "components/search_filter_bar.html" %}
+
+    <div class="card section-card">
+
+        <table class="table align-middle">
+
+            <thead>
+
+            <tr>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Status</th>
+                <th class="text-center">
+                    Actions
+                </th>
+            </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% for company in companies %}
+
+                <tr>
+
+                    <td>
+                        {{ company.name }}
+                    </td>
+
+                    <td>
+                        {{ company.phone }}
+                    </td>
+
+                    <td>
+                        {{ company.email }}
+                    </td>
+
+                    <td>
+
+                        {% if company.is_active %}
+
+                            <span class="badge bg-success">
+                            Active
+                        </span>
+
+                        {% else %}
+
+                            <span class="badge bg-danger">
+                            Inactive
+                        </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td class="text-center">
+
+                        <a href="{% url 'companies:company_detail' company.id %}"
+                           class="btn btn-sm btn-light">
+
+                            View
+
+                        </a>
+
+                        <a href="{% url 'companies:company_update' company.id %}"
+                           class="btn btn-sm btn-primary">
+
+                            Edit
+
+                        </a>
+
+                    </td>
+                </tr>
+
+            {% empty %}
+
+                <tr>
+
+                    <td colspan="5"
+                        class="text-center text-secondary">
+
+                        No companies found.
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+{% endblock %}

@@ -1,0 +1,2 @@
+class FeatureGate:
+    pass

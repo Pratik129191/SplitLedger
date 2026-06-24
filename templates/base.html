@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% block title %}
+            SplitLedger
+        {% endblock %}
+    </title>
+
+    <script>
+        const savedTheme = localStorage.getItem("splitledger_theme");
+        if (savedTheme) {
+            document.documentElement.setAttribute(
+                "data-theme",
+                savedTheme
+            );
+        }
+    </script>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet"
+          href="{% static 'third_party/bootstrap/v5.3.8/css/bootstrap.min.css' %}">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet"
+          href="{% static 'third_party/bootstrap-icons/v1.13.1/bootstrap-icons.css' %}">
+
+    <!-- App CSS -->
+    <link rel="stylesheet"
+          href="{% static 'css/style.css' %}">
+
+    {% block extra_css %}
+    {% endblock %}
+
+</head>
+
+<body>
+
+{% block content %}
+{% endblock %}
+
+<script src="{% static 'third_party/bootstrap/v5.3.8/js/bootstrap.bundle.min.js' %}"></script>
+
+<script src="{% static 'js/app.js' %}"></script>
+
+{% block extra_js %}
+{% endblock %}
+
+</body>
+</html>
+

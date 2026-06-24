@@ -1,0 +1,47 @@
+<header class="topbar">
+
+    <div class="d-flex align-items-center gap-3">
+
+        <button class="btn btn-light menu-toggle"
+                id="sidebarToggle">
+
+            <i class="bi bi-list"></i>
+
+        </button>
+
+        <div class="topbar-search">
+
+            <i class="bi bi-search"></i>
+
+            <input
+                    type="text"
+                    placeholder="Search anything..."
+            >
+
+        </div>
+
+    </div>
+
+    <div class="topbar-right">
+        <button class="icon-btn"
+                id="themeToggle">
+            <i class="bi bi-moon-stars"></i>
+        </button>
+
+        <button class="icon-btn">
+            <i class="bi bi-bell"></i>
+        </button>
+
+        {% if request.user.is_authenticated %}
+
+            <div class="user-avatar">
+
+                {{ request.user.email|first|upper }}
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</header>

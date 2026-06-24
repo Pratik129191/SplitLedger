@@ -1,0 +1,257 @@
+{% extends "layouts/app_layout.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block page_content %}
+
+    <div class="mb-4">
+        <h2 class="fw-bold mb-1">Dashboard</h2>
+
+        <div class="text-secondary mb-4">
+            Welcome back to SplitLedger
+        </div>
+
+        <div class="welcome-card">
+            <div>
+                <h3>Hello {{ request.user }}</h3>
+
+                <div class="welcome-subtitle">
+                    Manage sales, purchases and inventory from one place.
+                </div>
+            </div>
+
+            <i class="bi bi-graph-up-arrow"></i>
+        </div>
+    </div>
+
+    <div class="row g-4">
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card dashboard-card">
+                <div class="dashboard-icon bg-primary-subtle text-primary"><i class="bi bi-currency-rupee"></i></div>
+                <div class="dashboard-card-title">Today's Sales</div>
+                <div class="dashboard-card-value">₹ {{ today_sales }}</div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card dashboard-card">
+                <div class="dashboard-icon bg-success-subtle text-success"><i class="bi bi-cart"></i></div>
+                <div class="dashboard-card-title">Today's Purchase</div>
+                <div class="dashboard-card-value">₹ {{ today_purchase }}</div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card dashboard-card">
+                <div class="dashboard-icon bg-warning-subtle text-warning"><i class="bi bi-wallet2"></i></div>
+                <div class="dashboard-card-title">Receivable</div>
+                <div class="dashboard-card-value">₹ {{ receivable }}</div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card dashboard-card">
+                <div class="dashboard-icon bg-danger-subtle text-danger"><i class="bi bi-credit-card"></i></div>
+                <div class="dashboard-card-title">Payable</div>
+                <div class="dashboard-card-value">₹ {{ payable }}</div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row g-4 mt-1">
+        <div class="col-md-4">
+
+            <div class="mini-card">
+                <div class="mini-title">Customers</div>
+                <div class="mini-value">{{ customer_count }}</div>
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="mini-card">
+                <div class="mini-title">Vendors</div>
+                <div class="mini-value">{{ vendor_count }}</div>
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="mini-card">
+                <div class="mini-title">Products</div>
+                <div class="mini-value">{{ product_count }}</div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row g-4 mt-1">
+        <div class="col-xl-8">
+
+            <div class="card section-card">
+                <div class="section-header">
+                    <h5>Quick Actions</h5>
+                </div>
+
+                <div class="row g-3">
+
+                    <div class="col-md-3">
+                        <div class="quick-card">
+                            <i class="bi bi-receipt"></i>
+                            <span>New Sale</span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="quick-card">
+                            <i class="bi bi-cart"></i>
+                            <span>Purchase</span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="quick-card">
+                            <i class="bi bi-people"></i>
+                            <span>Customer</span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="quick-card">
+                            <i class="bi bi-box"></i>
+                            <span>Product</span>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-xl-4">
+
+            <div class="card section-card">
+
+                <div class="section-header">
+                    <h5>Low Stock</h5>
+                </div>
+
+                {% if low_stock_products %}
+
+                    {% for stock in low_stock_products %}
+                        <div class="low-stock-row">
+                            <div>
+                                <div class="fw-semibold">{{ stock.company_product.product_master.name }}</div>
+                                <small class="text-secondary">{{ stock.company_product.company.name }}</small>
+                            </div>
+
+                            <span class="badge text-bg-danger">
+                            {{ stock.quantity }}
+                        </span>
+                        </div>
+                    {% endfor %}
+
+                {% else %}
+
+                    <div class="text-secondary">
+                        No low stock products.
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row g-4 mt-2">
+
+        <div class="col-lg-6">
+
+            <div class="card section-card">
+
+                <div class="section-header">
+                    <h5>Recent Sales</h5>
+                </div>
+
+                <table class="table align-middle">
+
+                    <thead>
+                    <tr>
+                        <th>Invoice</th>
+                        <th>Customer</th>
+                        <th>Total</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+
+                    {% for sale in recent_sales %}
+                        <tr>
+                            <td>{{ sale.invoice_number }}</td>
+                            <td>{{ sale.customer|default:"Walk-in Customer" }}</td>
+                            <td>₹ {{ sale.total_amount }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="3">No sales available.</td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-lg-6">
+
+            <div class="card section-card">
+
+                <div class="section-header">
+                    <h5>Recent Purchases</h5>
+                </div>
+
+                <table class="table align-middle">
+
+                    <thead>
+                    <tr>
+                        <th>Invoice</th>
+                        <th>Vendor</th>
+                        <th>Total</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+
+                    {% for purchase in recent_purchases %}
+                        <tr>
+                            <td>{{ purchase.invoice_number }}</td>
+                            <td>{{ purchase.vendor }}</td>
+                            <td>₹ {{ purchase.total_amount }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="3">No purchases available.</td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}

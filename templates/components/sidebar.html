@@ -1,0 +1,113 @@
+<div class="sidebar" id="sidebar">
+
+    <div class="sidebar-brand">
+
+        <i class="bi bi-wallet2"></i>
+
+        <span>SplitLedger</span>
+
+    </div>
+
+    <div class="sidebar-section">
+
+        <div class="sidebar-section-title">
+            GENERAL
+        </div>
+
+        <a href="{% url 'core:dashboard' %}" class="sidebar-link active">
+            <i class="bi bi-grid"></i>
+            Dashboard
+        </a>
+    </div>
+
+
+    <div class="sidebar-section">
+
+        <div class="sidebar-section-title">
+            MASTERS
+        </div>
+
+        <a href="{% url 'companies:company_list' %}" class="sidebar-link">
+            <i class="bi bi-buildings"></i>
+            Companies
+        </a>
+
+        <a href="{% url 'products:product_list' %}" class="sidebar-link">
+            <i class="bi bi-box"></i>
+            Products
+        </a>
+
+        <a href="{% url 'customers:customer_list' %}" class="sidebar-link">
+            <i class="bi bi-people"></i>
+            Customers
+        </a>
+
+        <a href="{% url 'vendors:vendor_list' %}" class="sidebar-link">
+            <i class="bi bi-truck"></i>
+            Vendors
+        </a>
+
+    </div>
+
+
+    <div class="sidebar-section">
+
+        <div class="sidebar-section-title">
+            TRANSACTIONS
+        </div>
+
+        <a href="{% url 'purchases:purchase_list' %}" class="sidebar-link">
+            <i class="bi bi-cart"></i>
+            Purchases
+        </a>
+
+        <a href="#" class="sidebar-link">
+            <i class="bi bi-receipt"></i>
+            Sales
+        </a>
+
+        <a href="#" class="sidebar-link">
+            <i class="bi bi-box-seam"></i>
+            Inventory
+        </a>
+
+    </div>
+
+
+    <div class="sidebar-section">
+
+        <div class="sidebar-section-title">
+            ANALYTICS
+        </div>
+
+        <a href="#" class="sidebar-link">
+            <i class="bi bi-bar-chart"></i>
+            Reports
+        </a>
+
+    </div>
+
+    <div class="sidebar-section">
+
+        <div class="sidebar-section-title">
+            USER ACTIONS
+        </div>
+
+        <a href="{% url 'profile' %}" class="sidebar-link">
+            <i class="bi bi-person"></i>
+            Profile
+        </a>
+
+        <a href="{% url 'change_password' %}" class="sidebar-link">
+            <i class="bi bi-key"></i>
+            Change Password
+        </a>
+
+        <a href="{% url 'logout' %}" class="sidebar-link">
+            <i class="bi bi-box-arrow-right"></i>
+            Logout
+        </a>
+    </div>
+
+</div>
+

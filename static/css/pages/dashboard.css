@@ -1,0 +1,123 @@
+.dashboard-card {
+    padding: 32px;
+    border-radius: 24px;
+    transition: .2s;
+    height: 100%;
+    background: var(--sl-surface);
+}
+
+.dashboard-card:hover {
+    transform: translateY(-4px);
+}
+
+.dashboard-card-title {
+    color: var(--sl-text-secondary);
+    margin-bottom: 18px;
+    font-size: .95rem;
+}
+
+.dashboard-card-value {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.dashboard-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    margin-bottom: 18px;
+}
+
+.quick-card {
+    height: 120px;
+    background: var(--sl-surface-hover);
+    border-radius: 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.quick-card:hover {
+    transform: translateY(-4px);
+    background: var(--sl-surface);
+    box-shadow: var(--sl-shadow);
+}
+
+.quick-card i {
+    font-size: 1.5rem;
+    color: var(--sl-primary);
+}
+
+.low-stock-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--sl-border);
+}
+
+.low-stock-row:last-child {
+    border-bottom: none;
+}
+
+.welcome-card {
+    background: linear-gradient(135deg, #2563eb, #4f46e5);
+    padding: 40px;
+    border-radius: 24px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+    box-shadow: 0 10px 40px rgba(79, 70, 229, .18);
+}
+
+.welcome-card h3 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.welcome-card i {
+    font-size: 5rem;
+    opacity: .15;
+}
+
+.welcome-subtitle {
+    opacity: .9;
+}
+
+.mini-card {
+    background: var(--sl-surface);
+    padding: 24px 28px;
+    border-radius: 20px;
+    box-shadow: var(--sl-shadow);
+    height: 120px;
+    transition: .2s;
+}
+
+.mini-card:hover {
+    transform: translateY(-3px);
+}
+
+.mini-title {
+    font-size: .9rem;
+    color: var(--sl-text-muted);
+    font-weight: 600;
+    margin-bottom: 12px;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+}
+
+.mini-value {
+    font-size: 2rem;
+    font-weight: 700;
+}

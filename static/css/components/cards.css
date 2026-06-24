@@ -1,0 +1,16 @@
+.card {
+    background: var(--sl-surface);
+    border: none;
+    border-radius: var(--sl-radius-md);
+    box-shadow: var(--sl-shadow);
+}
+
+.section-card {
+    padding: 28px;
+    background: var(--sl-surface);
+}
+
+.section-header {
+    margin-bottom: 20px;
+}
+

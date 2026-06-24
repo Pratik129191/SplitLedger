@@ -1,0 +1,89 @@
+{% extends "layouts/app_layout.html" %}
+
+{% block title %}
+    Customers
+{% endblock %}
+
+{% block page_content %}
+
+    {% url 'customers:customer_create' as customer_create_url %}
+
+    {% include "components/page_header.html" with title="Customers" subtitle="Manage all customers" button_text="Add Customer" button_url=customer_create_url %}
+
+    {% include "components/search_filter_bar.html" %}
+
+    <div class="card section-card">
+
+        <table class="table align-middle">
+
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Outstanding</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+
+            <tbody>
+
+            {% for customer in customers %}
+
+                <tr>
+
+                    <td>
+                        {{ customer.name }}
+                    </td>
+
+                    <td>
+                        {{ customer.phone }}
+                    </td>
+
+                    <td>
+                        ₹ {{ customer.outstanding_amount }}
+                    </td>
+
+                    <td>
+
+                        <a href="{% url 'customers:customer_detail' customer.id %}"
+                           class="btn btn-sm btn-outline-primary">
+                            View
+                        </a>
+
+                        <a href="{% url 'customers:customer_update' customer.id %}"
+                           class="btn btn-sm btn-outline-warning">
+                            Edit
+                        </a>
+
+                        <a href="{% url 'customers:customer_ledger' customer.id %}"
+                           class="btn btn-sm btn-outline-success">
+                            Ledger
+                        </a>
+
+                    </td>
+
+                </tr>
+
+            {% empty %}
+
+                <tr>
+
+                    <td colspan="4"
+                        class="text-center text-secondary">
+
+                        No customers found.
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+
+    </div>
+
+{% endblock %}
