@@ -4,6 +4,12 @@
     Vendor Details
 {% endblock %}
 
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="{% url 'core:dashboard' %}">Dashboard</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'vendors:vendor_list' %}">Vendors</a></li>
+    <li class="breadcrumb-item active">{{ vendor.name }}</li>
+{% endblock %}
+
 {% block page_content %}
 
     {% include "components/page_header.html" with title=vendor.name subtitle="Vendor information" %}
@@ -12,62 +18,37 @@
 
         <div class="row">
 
-            <div class="col-md-6">
-                <h6>Name</h6>
-                <p>{{ vendor.name }}</p>
-            </div>
+            {% include "components/detail_item.html" with label="Name" value=vendor.name %}
+            {% include "components/detail_item.html" with label="Phone" value=vendor.phone %}
+            {% include "components/detail_item.html" with label="Email" value=vendor.email %}
+            {% include "components/detail_item.html" with label="Address" value=vendor.address %}
 
-            <div class="col-md-6">
-                <h6>Phone</h6>
-                <p>{{ vendor.phone }}</p>
-            </div>
-
-            <div class="col-md-6">
-                <h6>Email</h6>
-                <p>{{ vendor.email }}</p>
-            </div>
-
-            <div class="col-md-6">
-                <h6>Address</h6>
-                <p>{{ vendor.address }}</p>
-            </div>
-
-            <div class="col-md-4">
-                <h6>Total Purchase</h6>
-                <p>₹ {{ vendor.total_purchase_amount }}</p>
-            </div>
-
-            <div class="col-md-4">
-                <h6>Total Paid</h6>
-                <p>₹ {{ vendor.total_paid_amount }}</p>
-            </div>
-
-            <div class="col-md-4">
-                <h6>Outstanding</h6>
-                <p>₹ {{ vendor.outstanding_amount }}</p>
-            </div>
+            {% include "components/detail_item.html" with label="Total Purchase" value=vendor.total_purchase_amount col="col-md-4" %}
+            {% include "components/detail_item.html" with label="Total Paid" value=vendor.total_paid_amount col="col-md-4" %}
+            {% include "components/detail_item.html" with label="Outstanding" value=vendor.outstanding_amount col="col-md-4" %}
 
         </div>
 
         <hr>
 
-        <a
-                href="{% url 'vendors:vendor_update' vendor.id %}"
-                class="btn btn-primary">
-            Edit
-        </a>
+        <div class="detail-actions">
 
-        <a
-                href="{% url 'vendors:vendor_ledger' vendor.id %}"
-                class="btn btn-success">
-            Ledger
-        </a>
+            <a href="{% url 'vendors:vendor_update' vendor.id %}"
+               class="btn btn-primary">
+                Edit Vendor
+            </a>
 
-        <a
-                href="{% url 'vendors:vendor_list' %}"
-                class="btn btn-light">
-            Back
-        </a>
+            <a href="{% url 'vendors:vendor_ledger' vendor.id %}"
+               class="btn btn-success">
+                Ledger
+            </a>
+
+            <a href="{% url 'vendors:vendor_list' %}"
+               class="btn btn-light">
+                Back to List
+            </a>
+
+        </div>
 
     </div>
 

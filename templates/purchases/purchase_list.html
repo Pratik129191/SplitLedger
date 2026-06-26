@@ -4,6 +4,11 @@
     Purchases
 {% endblock %}
 
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="{% url 'core:dashboard' %}">Dashboard</a></li>
+    <li class="breadcrumb-item active">Purchases</li>
+{% endblock %}
+
 {% block page_content %}
 
     {% url 'purchases:purchase_create' as purchase_create_url %}
@@ -91,7 +96,7 @@
 
                         <a
                                 href="{% url 'purchases:purchase_settlement' purchase.id %}"
-                                class="btn btn-sm btn-success">
+                                class="btn btn-sm btn-outline-secondary">
 
                             Settlement
 

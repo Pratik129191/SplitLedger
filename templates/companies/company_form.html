@@ -4,6 +4,12 @@
     {{ title }}
 {% endblock %}
 
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="{% url 'core:dashboard' %}">Dashboard</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'companies:company_list' %}">Companies</a></li>
+    <li class="breadcrumb-item active">{{ title }}</li>
+{% endblock %}
+
 {% block page_content %}
 
     {% include "components/page_header.html" with title=title subtitle="Manage company information" %}
@@ -60,18 +66,15 @@
 
             <hr>
 
-            <button class="btn btn-primary">
-
-                Save Company
-
-            </button>
-
-            <a href="{% url 'companies:company_list' %}"
-               class="btn btn-light">
-
-                Cancel
-
-            </a>
+            <div class="form-actions d-flex justify-content-between align-items-center">
+                <a href="{% url 'companies:company_list' %}"
+                   class="btn btn-light">
+                    Cancel
+                </a>
+                <button class="btn btn-primary">
+                    Save Company
+                </button>
+            </div>
 
         </form>
 

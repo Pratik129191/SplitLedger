@@ -4,6 +4,11 @@
     Companies
 {% endblock %}
 
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="{% url 'core:dashboard' %}">Dashboard</a></li>
+    <li class="breadcrumb-item active">Companies</li>
+{% endblock %}
+
 {% block page_content %}
     {% url 'companies:company_create' as company_create_url %}
     {% include "components/page_header.html" with title="Companies" subtitle="Manage all companies" button_text="Add Company" button_url=company_create_url %}

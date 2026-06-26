@@ -23,6 +23,11 @@ def change_password_view(request):
                 request,
                 'Your password was successfully updated!'
             )
+        else:
+            messages.error(
+                request,
+                "Please correct the errors below."
+            )
     return render(
         request,
         'accounts/change_password.html',

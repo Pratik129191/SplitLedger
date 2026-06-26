@@ -4,6 +4,13 @@
     Vendor Ledger
 {% endblock %}
 
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="{% url 'core:dashboard' %}">Dashboard</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'vendors:vendor_list' %}">Vendors</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'vendors:vendor_detail' vendor.id %}">{{ vendor.name }}</a></li>
+    <li class="breadcrumb-item active">Ledger</li>
+{% endblock %}
+
 {% block page_content %}
 
     {% include "components/page_header.html" with title="Vendor Ledger" subtitle=vendor.name %}

@@ -5,11 +5,22 @@
 
 .table td {
     vertical-align: middle;
+    padding: 16px;
 }
 
 .table th {
     font-weight: 600;
     color: var(--sl-text-secondary);
+    padding: 16px;
+    background: var(--sl-bg);
+}
+
+.table tbody tr {
+    transition: var(--sl-transition);
+}
+
+.table tbody tr:hover {
+    background: var(--sl-surface-hover);
 }
 
 .table-card {
@@ -17,5 +28,5 @@
 }
 
 .table thead {
-    border-bottom: 1px solid var(--sl-border);
+    border-bottom: 2px solid var(--sl-border);
 }

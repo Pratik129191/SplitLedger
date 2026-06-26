@@ -1,10 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+{% extends "layouts/app_layout.html" %}
+{% block title %}Stock Inventory{% endblock %}
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="{% url 'core:dashboard' %}">Dashboard</a></li>
+    <li class="breadcrumb-item active">Inventory</li>
+{% endblock %}
+{% block page_content %}
+    <div class="card section-card">
+        {% include "components/empty_state.html" with title="Inventory Management Coming Soon" message="Stock tracking and low stock alerts will be available shortly." %}
+    </div>
+{% endblock %}

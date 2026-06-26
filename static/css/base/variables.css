@@ -13,6 +13,7 @@
 
     --sl-sidebar-bg: #ffffff;
     --sl-topbar-bg: #ffffff;
+    --sl-sidebar-active-bg: #eff6ff;
 
     --sl-text: #111827;
     --sl-text-secondary: #64748b;
@@ -48,6 +49,7 @@
     --sl-sidebar-bg: #182235;
 
     --sl-topbar-bg: #182235;
+    --sl-sidebar-active-bg: #1e293b;
 
     --sl-text: #f9fafb;
 

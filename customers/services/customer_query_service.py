@@ -1,3 +1,4 @@
+from django.db.models import Q
 from customers.models import Customer
 
 
@@ -12,7 +13,11 @@ class CustomerQueryService:
 
         if search:
             queryset = queryset.filter(
-                name__icontains=search
+                Q(name__icontains=search)
+                |
+                Q(phone__icontains=search)
+                |
+                Q(email__icontains=search)
             )
 
         return queryset.order_by('name')

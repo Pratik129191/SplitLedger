@@ -12,10 +12,10 @@ def login_view(request):
             password = form.cleaned_data['password']
             user = authenticate(
                 request=request,
-                email=email,
+                username=email,
                 password=password
             )
-            if user:
+            if user is not None:
                 login(request, user)
                 return redirect('core:dashboard')
             messages.error(

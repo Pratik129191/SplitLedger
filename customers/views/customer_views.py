@@ -38,15 +38,26 @@ def customer_create_view(request):
     form = CustomerForm(request.POST or None)
     if request.method == 'POST':
         if form.is_valid():
-            CustomerService.create_customer(
-                owner=request.user,
-                **form.cleaned_data
-            )
-            messages.success(
+            try:
+                CustomerService.create_customer(
+                    owner=request.user,
+                    **form.cleaned_data
+                )
+                messages.success(
+                    request,
+                    'Customer created successfully.'
+                )
+                return redirect('customers:customer_list')
+            except Exception as e:
+                messages.error(
+                    request,
+                    str(e)
+                )
+        else:
+            messages.error(
                 request,
-                'Customer created successfully.'
+                "Please correct the errors below."
             )
-            return redirect('customers:customer_list')
     return render(
         request,
         'customers/customer_form.html',
@@ -70,15 +81,21 @@ def customer_update_view(request, pk):
     )
     if request.method == 'POST':
         if form.is_valid():
-            CustomerService.update_customer(
-                customer=customer,
-                **form.cleaned_data
-            )
-            messages.success(
-                request,
-                'Customer updated successfully.'
-            )
-            return redirect('customers:customer_list')
+            try:
+                CustomerService.update_customer(
+                    customer=customer,
+                    **form.cleaned_data
+                )
+                messages.success(
+                    request,
+                    'Customer updated successfully.'
+                )
+                return redirect('customers:customer_list')
+            except Exception as e:
+                messages.error(
+                    request,
+                    str(e)
+                )
     return render(
         request,
         'customers/customer_form.html',
@@ -99,13 +116,19 @@ def customer_delete_view(request, pk):
     CustomerService.deactivate_customer(
         customer=customer
     )
+    messages.success(
+        request,
+        "Customer deactivated successfully."
+    )
     return redirect('customers:customer_list')
 
 
 @login_required
 def customer_detail_view(request, pk):
     customer = get_object_or_404(
-        Customer,
+        Customer.objects.prefetch_related(
+            "sales"
+        ),
         pk=pk,
         owner=request.user
     )
@@ -135,6 +158,9 @@ def customer_ledger_view(request, pk):
         'customers/customer_ledger.html',
         {
             'customer': customer,
-            'entries': entries
+            'entries': entries,
+            "outstanding_amount": customer.outstanding_amount,
+            "total_sales": customer.total_sales_amount,
+            "total_received": customer.total_received_amount
         }
     )

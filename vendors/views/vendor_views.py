@@ -40,17 +40,23 @@ def vendor_create_view(request):
 
     if request.method == 'POST':
         if form.is_valid():
-            VendorService.create_vendor(
-                owner=request.user,
-                **form.cleaned_data
-            )
-            messages.success(
-                request,
-                'Vendor created successfully.'
-            )
-            return redirect(
-                'vendors:vendor_list'
-            )
+            try:
+                VendorService.create_vendor(
+                    owner=request.user,
+                    **form.cleaned_data
+                )
+                messages.success(
+                    request,
+                    'Vendor created successfully.'
+                )
+                return redirect(
+                    'vendors:vendor_list'
+                )
+            except Exception as e:
+                messages.error(
+                    request,
+                    str(e)
+                )
     return render(
         request,
         'vendors/vendor_form.html',
@@ -74,17 +80,23 @@ def vendor_update_view(request, pk):
     )
     if request.method == 'POST':
         if form.is_valid():
-            VendorService.update_vendor(
-                vendor=vendor,
-                **form.cleaned_data
-            )
-            messages.success(
-                request,
-                'Vendor updated successfully.'
-            )
-            return redirect(
-                'vendors:vendor_list'
-            )
+            try:
+                VendorService.update_vendor(
+                    vendor=vendor,
+                    **form.cleaned_data
+                )
+                messages.success(
+                    request,
+                    'Vendor updated successfully.'
+                )
+                return redirect(
+                    'vendors:vendor_list'
+                )
+            except Exception as e:
+                messages.error(
+                    request,
+                    str(e)
+                )
     return render(
         request,
         'vendors/vendor_form.html',
@@ -102,9 +114,15 @@ def vendor_delete_view(request, pk):
         pk=pk,
         owner=request.user
     )
-    VendorService.deactivate_vendor(
-        vendor=vendor
-    )
+    try:
+        VendorService.deactivate_vendor(
+            vendor=vendor
+        )
+    except Exception as e:
+        messages.error(
+            request,
+            str(e)
+        )
     return redirect(
         'vendors:vendor_list'
     )
@@ -113,7 +131,9 @@ def vendor_delete_view(request, pk):
 @login_required
 def vendor_detail_view(request, pk):
     vendor = get_object_or_404(
-        Vendor,
+        Vendor.objects.prefetch_related(
+            'purchases'
+        ),
         pk=pk,
         owner=request.user
     )
@@ -142,6 +162,9 @@ def vendor_ledger_view(request, pk):
         'vendors/vendor_ledger.html',
         {
             'vendor': vendor,
-            'entries': entries
+            'entries': entries,
+            'total_purchase': vendor.total_purchase_amount,
+            'total_paid': vendor.total_paid_amount,
+            'outstanding_amount': vendor.outstanding_amount,
         }
     )

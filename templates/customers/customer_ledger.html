@@ -4,6 +4,13 @@
     Customer Ledger
 {% endblock %}
 
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="{% url 'core:dashboard' %}">Dashboard</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'customers:customer_list' %}">Customers</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'customers:customer_detail' customer.id %}">{{ customer.name }}</a></li>
+    <li class="breadcrumb-item active">Ledger</li>
+{% endblock %}
+
 {% block page_content %}
 
     {% include "components/page_header.html" with title="Customer Ledger" subtitle=customer.name %}

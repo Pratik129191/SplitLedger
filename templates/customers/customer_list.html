@@ -4,6 +4,11 @@
     Customers
 {% endblock %}
 
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="{% url 'core:dashboard' %}">Dashboard</a></li>
+    <li class="breadcrumb-item active">Customers</li>
+{% endblock %}
+
 {% block page_content %}
 
     {% url 'customers:customer_create' as customer_create_url %}
@@ -46,17 +51,17 @@
                     <td>
 
                         <a href="{% url 'customers:customer_detail' customer.id %}"
-                           class="btn btn-sm btn-outline-primary">
+                           class="btn btn-sm btn-light">
                             View
                         </a>
 
                         <a href="{% url 'customers:customer_update' customer.id %}"
-                           class="btn btn-sm btn-outline-warning">
+                           class="btn btn-sm btn-primary">
                             Edit
                         </a>
 
                         <a href="{% url 'customers:customer_ledger' customer.id %}"
-                           class="btn btn-sm btn-outline-success">
+                           class="btn btn-sm btn-outline-secondary">
                             Ledger
                         </a>
 

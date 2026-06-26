@@ -12,6 +12,14 @@ class VendorAdmin(admin.ModelAdmin):
         'outstanding_amount',
     )
 
+    list_filter = (
+        'is_active'
+    )
+
+    ordering = (
+        'name'
+    )
+
     search_fields = (
         'name',
         'phone'

@@ -41,5 +41,5 @@ class CustomerLedgerService:
         return sorted(
             entries,
             key=lambda entry: entry['date'],
+            reverse=True
         )
-

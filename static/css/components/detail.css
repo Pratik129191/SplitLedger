@@ -1,16 +1,17 @@
 .detail-label {
-    font-size: .85rem;
+    font-size: .8rem;
     color: var(--sl-text-muted);
-    font-weight: 600;
-    margin-bottom: 6px;
+    font-weight: 700;
+    margin-bottom: 4px;
     text-transform: uppercase;
-    letter-spacing: .04em;
+    letter-spacing: .05em;
 }
 
 .detail-value {
-    font-size: 1rem;
+    font-size: 1.05rem;
+    font-weight: 500;
     color: var(--sl-text);
-    margin-bottom: 28px;
+    margin-bottom: 30px;
 }
 
 .detail-actions {

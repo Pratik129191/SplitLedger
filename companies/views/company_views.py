@@ -21,6 +21,7 @@ def company_list_view(request):
     context = {
         'companies': page_obj,
         'create_url': reverse('companies:company_create'),
+        'search': request.GET.get('search', ''),
     }
     return render(
         request,
@@ -34,15 +35,26 @@ def company_create_view(request):
     form = CompanyForm(request.POST or None)
     if request.method == "POST":
         if form.is_valid():
-            CompanyService.create_company(
-                owner=request.user,
-                **form.cleaned_data
-            )
-            messages.success(
+            try:
+                CompanyService.create_company(
+                    owner=request.user,
+                    **form.cleaned_data
+                )
+                messages.success(
+                    request,
+                    'Company created successfully.'
+                )
+                return redirect('companies:company_list')
+            except Exception as e:
+                messages.error(
+                    request,
+                    str(e)
+                )
+        else:
+            messages.error(
                 request,
-                'Company created successfully.'
+                "Please correct the errors below."
             )
-            return redirect('companies:company_list')
     return render(
         request,
         'companies/company_form.html',
@@ -67,15 +79,26 @@ def company_update_view(request, pk):
 
     if request.method == "POST":
         if form.is_valid():
-            CompanyService.update_company(
-                company=company,
-                **form.cleaned_data
-            )
-            messages.success(
+            try:
+                CompanyService.update_company(
+                    company=company,
+                    **form.cleaned_data
+                )
+                messages.success(
+                    request,
+                    'Company updated successfully.'
+                )
+                return redirect('companies:company_list')
+            except Exception as e:
+                messages.error(
+                    request,
+                    str(e)
+                )
+        else:
+            messages.error(
                 request,
-                'Company updated successfully.'
+                "Please correct the errors below."
             )
-            return redirect('companies:company_list')
     return render(
         request,
         'companies/company_form.html',
@@ -96,13 +119,21 @@ def company_delete_view(request, pk):
     CompanyService.deactivate_company(
         company=company
     )
+    messages.success(
+        request,
+        "Company deactivated successfully."
+    )
     return redirect('companies:company_list')
 
 
 @login_required
 def company_detail_view(request, pk):
     company = get_object_or_404(
-        Company,
+        Company.objects.prefetch_related(
+            "company_products",
+            "purchases",
+            "company_sales"
+        ),
         pk=pk,
         owner=request.user,
     )

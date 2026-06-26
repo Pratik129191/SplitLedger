@@ -1,10 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "layouts/app_layout.html" %}
 
-</body>
-</html>
+{% block title %}Sales{% endblock %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="{% url 'core:dashboard' %}">Dashboard</a></li>
+    <li class="breadcrumb-item active">Sales</li>
+{% endblock %}
+
+{% block page_content %}
+    <div class="card section-card">
+        {% include "components/empty_state.html" with title="Sales Module Coming Soon" message="We are working hard to bring you the best sales management experience. Stay tuned!" %}
+    </div>
+{% endblock %}

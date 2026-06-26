@@ -18,6 +18,11 @@ def profile_view(request):
                 request,
                 'Profile updated successfully.'
             )
+        else:
+            messages.error(
+                request,
+                "Please correct the errors below."
+            )
     return render(
         request,
         'accounts/profile.html',

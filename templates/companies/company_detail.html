@@ -4,99 +4,47 @@
     Company Details
 {% endblock %}
 
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="{% url 'core:dashboard' %}">Dashboard</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'companies:company_list' %}">Companies</a></li>
+    <li class="breadcrumb-item active">{{ company.name }}</li>
+{% endblock %}
+
 {% block page_content %}
 
     {% include "components/page_header.html" with title=company.name subtitle="Company information" %}
 
     <div class="card section-card">
 
-        <div class="row">
+        <div class="row g-4">
+
+            {% include "components/detail_item.html" with label="Name" value=company.name %}
+            {% include "components/detail_item.html" with label="Legal Name" value=company.legal_name %}
+            {% include "components/detail_item.html" with label="Phone" value=company.phone %}
+            {% include "components/detail_item.html" with label="Email" value=company.email %}
+            {% include "components/detail_item.html" with label="Created" value=company.created_at %}
 
             <div class="col-md-6">
 
-                <h6>Name</h6>
+                <div class="detail-label">Status</div>
 
-                <p>
-
-                    {{ company.name }}
-
-                </p>
-
-            </div>
-
-            <div class="col-md-6">
-
-                <h6>Legal Name</h6>
-
-                <p>
-
-                    {{ company.legal_name|default:"-" }}
-
-                </p>
-
-            </div>
-
-            <div class="col-md-6">
-
-                <h6>Phone</h6>
-
-                <p>
-
-                    {{ company.phone|default:"-" }}
-
-                </p>
-
-            </div>
-
-            <div class="col-md-6">
-
-                <h6>Email</h6>
-
-                <p>
-
-                    {{ company.email|default:"-" }}
-
-                </p>
-
-            </div>
-
-            <div class="col-md-6">
-
-                <h6>Created</h6>
-
-                <p>
-
-                    {{ company.created_at }}
-
-                </p>
-
-            </div>
-
-            <div class="col-md-6">
-
-                <h6>Status</h6>
-
-                <p>
+                <div class="detail-value">
 
                     {% if company.is_active %}
 
                         <span class="badge bg-success">
-
-                        Active
-
-                    </span>
+                            Active
+                        </span>
 
                     {% else %}
 
                         <span class="badge bg-danger">
-
-                        Inactive
-
-                    </span>
+                            Inactive
+                        </span>
 
                     {% endif %}
 
-                </p>
+                </div>
 
             </div>
 
@@ -104,23 +52,34 @@
 
         <hr>
 
-        <a href="{% url 'companies:company_update' company.id %}"
-           class="btn btn-primary">
+        <div class="detail-actions">
 
-            <i class="bi bi-pencil"></i>
+            <a href="{% url 'companies:company_update' company.id %}"
+               class="btn btn-primary">
 
-            Edit
+                <i class="bi bi-pencil"></i>
 
-        </a>
+                Edit Company
 
-        <a href="{% url 'companies:company_delete' company.id %}"
-           class="btn btn-danger">
+            </a>
 
-            <i class="bi bi-trash"></i>
+            <a href="{% url 'companies:company_delete' company.id %}"
+               class="btn btn-danger">
 
-            Deactivate
+                <i class="bi bi-trash"></i>
 
-        </a>
+                Deactivate
+
+            </a>
+
+            <a href="{% url 'companies:company_list' %}"
+               class="btn btn-light">
+
+                Back to List
+
+            </a>
+
+        </div>
 
     </div>
 

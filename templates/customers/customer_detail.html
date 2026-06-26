@@ -4,6 +4,12 @@
     Customer Details
 {% endblock %}
 
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="{% url 'core:dashboard' %}">Dashboard</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'customers:customer_list' %}">Customers</a></li>
+    <li class="breadcrumb-item active">{{ customer.name }}</li>
+{% endblock %}
+
 {% block page_content %}
 
     {% include "components/page_header.html" with title=customer.name subtitle="Customer information" %}

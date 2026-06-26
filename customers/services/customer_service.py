@@ -28,6 +28,7 @@ class CustomerService:
 
     @staticmethod
     def deactivate_customer(*, customer):
-        customer.is_active = False
-        customer.save()
-       
+        if customer.is_active:
+            customer.is_active = False
+            customer.save()
+        return customer

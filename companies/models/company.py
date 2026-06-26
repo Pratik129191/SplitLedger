@@ -10,7 +10,10 @@ class Company(BaseModel):
         related_name='companies',
     )
 
-    name = models.CharField(max_length=150)
+    name = models.CharField(
+        max_length=150,
+        db_index=True,
+    )
 
     legal_name = models.CharField(
         max_length=255,
@@ -24,12 +27,20 @@ class Company(BaseModel):
 
     email = models.EmailField(
         blank=True,
+        db_index=True,
     )
 
     class Meta:
         ordering = ('name',)
+        constraints = [
+            models.UniqueConstraint(
+                fields=[
+                    "owner",
+                    "name"
+                ],
+                name="unique_company_name_per_owner"
+            )
+        ]
 
     def __str__(self):
         return self.name
-
-

@@ -4,90 +4,44 @@
     Purchase Details
 {% endblock %}
 
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="{% url 'core:dashboard' %}">Dashboard</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'purchases:purchase_list' %}">Purchases</a></li>
+    <li class="breadcrumb-item active">{{ purchase.invoice_number }}</li>
+{% endblock %}
+
 {% block page_content %}
 
     {% include "components/page_header.html" with title="Purchase Details" subtitle=purchase.invoice_number %}
 
     <div class="card section-card mb-4">
 
-        <div class="row">
+        <div class="row g-4">
+
+            {% include "components/detail_item.html" with label="Invoice Number" value=purchase.invoice_number col="col-md-4" %}
+            {% include "components/detail_item.html" with label="Company" value=purchase.company.name col="col-md-4" %}
+            {% include "components/detail_item.html" with label="Vendor" value=purchase.vendor.name col="col-md-4" %}
+            {% include "components/detail_item.html" with label="Purchase Date" value=purchase.created_at col="col-md-4" %}
+            {% include "components/detail_item.html" with label="Total Amount" value=purchase.total_amount col="col-md-4" %}
+            {% include "components/detail_item.html" with label="Paid Amount" value=purchase.paid_amount col="col-md-4" %}
+            {% include "components/detail_item.html" with label="Outstanding Amount" value=purchase.outstanding_amount col="col-md-4" %}
 
             <div class="col-md-4">
-                <h6>Invoice Number</h6>
-                <p>
-                    {{ purchase.invoice_number }}
-                </p>
+                <div class="detail-label">Status</div>
+                <div class="detail-value">
+
+                    {% if purchase.status == "CANCELLED" %}
+                        <span class="badge bg-danger">Cancelled</span>
+                    {% elif purchase.outstanding_amount > 0 %}
+                        <span class="badge bg-warning">Due</span>
+                    {% else %}
+                        <span class="badge bg-success">Paid</span>
+                    {% endif %}
+
+                </div>
             </div>
 
-            <div class="col-md-4">
-                <h6>Company</h6>
-                <p>
-                    {{ purchase.company.name }}
-                </p>
-            </div>
-
-            <div class="col-md-4">
-                <h6>Vendor</h6>
-                <p>
-                    {{ purchase.vendor.name }}
-                </p>
-            </div>
-
-            <div class="col-md-4">
-                <h6>Purchase Date</h6>
-                <p>
-                    {{ purchase.created_at }}
-                </p>
-            </div>
-
-            <div class="col-md-4">
-                <h6>Total Amount</h6>
-                <p>
-                    ₹ {{ purchase.total_amount }}
-                </p>
-            </div>
-
-            <div class="col-md-4">
-                <h6>Paid Amount</h6>
-                <p>
-                    ₹ {{ purchase.paid_amount }}
-                </p>
-            </div>
-
-            <div class="col-md-4">
-                <h6>Outstanding Amount</h6>
-                <p>
-                    ₹ {{ purchase.outstanding_amount }}
-                </p>
-            </div>
-
-            <div class="col-md-4">
-                <h6>Status</h6>
-
-                {% if purchase.status == "CANCELLED" %}
-                    <span class="badge bg-danger">
-        Cancelled
-    </span>
-
-                {% elif purchase.outstanding_amount > 0 %}
-                    <span class="badge bg-warning">
-        Due
-    </span>
-
-                {% else %}
-                    <span class="badge bg-success">
-        Paid
-    </span>
-                {% endif %}
-
-            </div>
-
-            <div class="col-md-12">
-                <h6>Notes</h6>
-                <p>
-                    {{ purchase.notes|default:"-" }}
-                </p>
-            </div>
+            {% include "components/detail_item.html" with label="Notes" value=purchase.notes col="col-md-12" %}
 
         </div>
 
@@ -156,34 +110,29 @@
 
         </table>
 
-        <hr>
+        <div class="detail-actions">
 
-        <a
-                href="{% url 'purchases:purchase_settlement' purchase.id %}"
-                class="btn btn-success">
+            <a href="{% url 'purchases:purchase_settlement' purchase.id %}"
+               class="btn btn-success">
+                Settlement
+            </a>
 
-            Settlement
+            <a href="{% url 'purchases:purchase_update' purchase.id %}"
+               class="btn btn-primary">
+                Edit Purchase
+            </a>
 
-        </a>
-        <a
-                href="{% url 'purchases:purchase_update' purchase.id %}"
-                class="btn btn-primary">
-            Edit Purchase
-        </a>
+            <a href="{% url 'purchases:purchase_cancel' purchase.id %}"
+               class="btn btn-danger">
+                Cancel Purchase
+            </a>
 
-        <a
-                href="{% url 'purchases:purchase_cancel' purchase.id %}"
-                class="btn btn-danger">
-            Cancel Purchase
-        </a>
+            <a href="{% url 'purchases:purchase_list' %}"
+               class="btn btn-light">
+                Back to List
+            </a>
 
-        <a
-                href="{% url 'purchases:purchase_list' %}"
-                class="btn btn-light">
-
-            Back
-
-        </a>
+        </div>
 
     </div>
 

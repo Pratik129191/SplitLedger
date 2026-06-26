@@ -4,6 +4,8 @@ from accounts.managers import CustomUserManager
 
 
 class User(AbstractUser):
+    username = None
+    
     email = models.EmailField(
         unique=True,
     )
