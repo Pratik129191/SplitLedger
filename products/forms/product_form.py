@@ -29,6 +29,12 @@ class ProductForm(forms.ModelForm):
             "selling_price"
         )
 
+    def clean_name(self):
+        return self.cleaned_data["name"].strip()
+
+    def clean_description(self):
+        return self.cleaned_data["description"].strip()
+    
     def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -37,4 +43,3 @@ class ProductForm(forms.ModelForm):
                 owner=user,
                 is_active=True
             )
-           

@@ -11,6 +11,15 @@ class ProductMasterAdmin(admin.ModelAdmin):
         'is_active'
     )
 
+    list_filter = (
+        'unit',
+        'is_active',
+    )
+
+    ordering = (
+        'name',
+    )
+
     search_fields = (
         'name',
     )

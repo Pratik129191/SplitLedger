@@ -9,10 +9,17 @@ from products.services import ProductService, ProductQueryService
 
 @login_required
 def product_list_view(request):
-    products = ProductQueryService.search(
-        user=request.user,
-        search=request.GET.get('search'),
-    )
+    try:
+        products = ProductQueryService.search(
+            user=request.user,
+            search=request.GET.get('search'),
+        )
+    except Exception as e:
+        messages.error(
+            request,
+            str(e)
+        )
+
     paginator = Paginator(products, 10)
     page_obj = paginator.get_page(
         request.GET.get('page')
@@ -33,6 +40,7 @@ def product_detail_view(request, pk):
         CompanyProduct.objects.select_related(
             'company', 'product_master'
         ),
+        company__owner=request.user,
         pk=pk
     )
     return render(
@@ -52,13 +60,19 @@ def product_create_view(request):
     )
     if request.method == 'POST':
         if form.is_valid():
-            ProductService.create_product(
-                company=form.cleaned_data['company'],
-                name=form.cleaned_data['name'],
-                unit=form.cleaned_data['unit'],
-                selling_price=form.cleaned_data['selling_price'],
-                description=form.cleaned_data['description'],
-            )
+            try:
+                ProductService.create_product(
+                    company=form.cleaned_data['company'],
+                    name=form.cleaned_data['name'],
+                    unit=form.cleaned_data['unit'],
+                    selling_price=form.cleaned_data['selling_price'],
+                    description=form.cleaned_data['description'],
+                )
+            except Exception as e:
+                messages.error(
+                    request,
+                    str(e)
+                )
             messages.success(
                 request,
                 'Product created successfully.'
@@ -79,7 +93,10 @@ def product_create_view(request):
 @login_required
 def product_update_view(request, pk):
     product = get_object_or_404(
-        CompanyProduct,
+        CompanyProduct.objects.select_related(
+            'company', 'product_master'
+        ),
+        company__owner=request.user,
         pk=pk
     )
     initial = {
@@ -97,13 +114,19 @@ def product_update_view(request, pk):
 
     if request.method == 'POST':
         if form.is_valid():
-            ProductService.update_product(
-                company_product=product,
-                name=form.cleaned_data['name'],
-                unit=form.cleaned_data['unit'],
-                selling_price=form.cleaned_data['selling_price'],
-                description=form.cleaned_data['description'],
-            )
+            try:
+                ProductService.update_product(
+                    company_product=product,
+                    name=form.cleaned_data['name'],
+                    unit=form.cleaned_data['unit'],
+                    selling_price=form.cleaned_data['selling_price'],
+                    description=form.cleaned_data['description'],
+                )
+            except Exception as e:
+                messages.error(
+                    request,
+                    str(e)
+                )
             messages.success(
                 request,
                 'Product updated successfully.'
@@ -119,3 +142,20 @@ def product_update_view(request, pk):
             'title': 'Edit Product',
         }
     )
+
+
+@login_required
+def product_delete_view(request, pk):
+    company_product = get_object_or_404(
+        CompanyProduct.objects.select_related(
+            'company', 'product_master'
+        ),
+        company__owner=request.user,
+        pk=pk
+    )
+    ProductService.deactivate_product(company_product=company_product)
+    messages.success(
+        request,
+        'Product deleted successfully.'
+    )
+    return redirect('products:product_list')

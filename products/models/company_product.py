@@ -9,12 +9,14 @@ class CompanyProduct(BaseModel):
         Company,
         on_delete=models.CASCADE,
         related_name='company_products',
+        db_index=True,
     )
 
     product_master = models.ForeignKey(
         ProductMaster,
         on_delete=models.CASCADE,
         related_name='company_products',
+        db_index=True,
     )
 
     selling_price = models.DecimalField(

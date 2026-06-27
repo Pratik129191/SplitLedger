@@ -4,10 +4,14 @@ from core.models import BaseModel
 
 
 class ProductMaster(BaseModel):
-    name = models.CharField(max_length=250)
+    name = models.CharField(
+        max_length=250,
+        db_index=True,
+    )
     unit = models.CharField(
         max_length=Units.MAX_LENGTH,
         choices=Units.CHOICES,
+        db_index=True,
     )
     description = models.TextField(
         blank=True,
@@ -18,4 +22,3 @@ class ProductMaster(BaseModel):
 
     def __str__(self):
         return self.name
-

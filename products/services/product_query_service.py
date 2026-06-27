@@ -1,3 +1,4 @@
+from django.db.models import Q
 from products.models import CompanyProduct
 
 
@@ -15,9 +16,11 @@ class ProductQueryService:
 
         if search:
             queryset = queryset.filter(
-                product_master__name__icontains=search
+                Q(product_master__name__icontains=search)
+                |
+                Q(company__name__icontains=search)
             )
-
+    
         return queryset.order_by(
             "product_master__name"
         )
