@@ -14,7 +14,7 @@ def dashboard_view(request):
         "customer_count": DashboardService.get_total_customers(),
         "vendor_count": DashboardService.get_total_vendors(),
         "product_count": DashboardService.get_total_products_in_stock(),
-        "low_stock_products": LowStockService.get_low_stock_products(),
+        "low_stock_products": LowStockService.get_low_stock_products(user=request.user),
         "recent_sales": DashboardService.get_recent_sales(),
         "recent_purchases": DashboardService.get_recent_purchases(),
     }

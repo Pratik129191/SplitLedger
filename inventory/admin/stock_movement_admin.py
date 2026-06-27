@@ -19,3 +19,4 @@ class StockMovementAdmin(admin.ModelAdmin):
         'company_product__product_master__name',
     )
 
+    date_hierarchy = "created_at"

@@ -14,6 +14,7 @@ class StockMovement(BaseModel):
     movement_type = models.CharField(
         max_length=StockMovementTypes.MAX_LENGTH,
         choices=StockMovementTypes.CHOICES,
+        db_index=True,
     )
 
     quantity = models.DecimalField(
@@ -26,6 +27,4 @@ class StockMovement(BaseModel):
     )
 
     class Meta:
-        ordering = ('-created_at', )
-
-
+        ordering = ('-created_at',)
