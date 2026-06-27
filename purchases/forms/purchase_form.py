@@ -17,6 +17,9 @@ class PurchaseForm(forms.Form):
         widget=forms.Textarea,
     )
 
+    def clean_notes(self):
+        return self.cleaned_data['notes'].strip()
+
     def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
         if user:

@@ -17,6 +17,12 @@ class PurchaseItemForm(forms.Form):
         min_value=0.01
     )
 
+    def clean_quantity(self):
+        return self.cleaned_data['quantity']
+
+    def clean_rate(self):
+        return self.cleaned_data['rate']
+
     def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['company_product'].queryset = CompanyProduct.objects.select_related(

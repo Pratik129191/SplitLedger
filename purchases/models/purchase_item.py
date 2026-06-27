@@ -33,8 +33,4 @@ class PurchaseItem(BaseModel):
     )
 
     class Meta:
-        ordering = ('-created_at',)
-
-
-
-
+        ordering = ('created_at',)

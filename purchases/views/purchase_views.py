@@ -95,7 +95,11 @@ def purchase_create_view(request):
 def purchase_detail_view(request, pk):
     purchase = get_object_or_404(
         Purchase.objects.select_related(
-            'company', 'vendor'
+            'company',
+            'vendor',
+        ).prefetch_related(
+            'items',
+            'settlements',
         ),
         pk=pk,
         company__owner=request.user
@@ -116,9 +120,15 @@ def purchase_cancel_view(request, pk):
         pk=pk,
         company__owner=request.user
     )
-    PurchaseService.cancel_purchase(
-        purchase=purchase
-    )
+    try:
+        PurchaseService.cancel_purchase(
+            purchase=purchase
+        )
+    except Exception as e:
+        messages.error(
+            request,
+            str(e)
+        )
     messages.success(
         request,
         'Purchase cancelled successfully.'
@@ -163,29 +173,35 @@ def purchase_update_view(request, pk):
 
     if request.method == 'POST':
         if form.is_valid() and item_formset.is_valid():
-            items = []
-            for row in item_formset:
-                if not row.cleaned_data:
-                    continue
-                if row.cleaned_data.get('DELETE'):
-                    continue
-                items.append(
-                    {
-                        'company_product': row.cleaned_data['company_product'],
-                        'quantity': row.cleaned_data['quantity'],
-                        'rate': row.cleaned_data['rate'],
-                    }
+            try:
+                items = []
+                for row in item_formset:
+                    if not row.cleaned_data:
+                        continue
+                    if row.cleaned_data.get('DELETE'):
+                        continue
+                    items.append(
+                        {
+                            'company_product': row.cleaned_data['company_product'],
+                            'quantity': row.cleaned_data['quantity'],
+                            'rate': row.cleaned_data['rate'],
+                        }
+                    )
+                PurchaseService.update_purchase(
+                    purchase=purchase,
+                    vendor=form.cleaned_data['vendor'],
+                    notes=form.cleaned_data['notes'],
+                    items=items
                 )
-            PurchaseService.update_purchase(
-                purchase=purchase,
-                vendor=form.cleaned_data['vendor'],
-                notes=form.cleaned_data['notes'],
-                items=items
-            )
-            messages.info(
-                request,
-                'Purchase edit will be implemented in phase 11.3'
-            )
+                messages.info(
+                    request,
+                    'Purchase updated successfully.'
+                )
+            except Exception as e:
+                messages.error(
+                    request,
+                    str(e)
+                )
             return redirect(
                 'purchases:purchase_detail',
                 purchase.id

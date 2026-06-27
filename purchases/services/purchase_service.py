@@ -14,6 +14,12 @@ class PurchaseService:
     @transaction.atomic
     def create_purchase(*, company, vendor, notes="", items=None):
         LicenseService().assert_can_create_purchase()
+
+        if vendor.owner_id != company.owner_id:
+            raise ValidationException(
+                'Vendor does not belong to company owner.'
+            )
+
         validate_purchase_items(items)
         purchase = Purchase.objects.create(
             company=company,
@@ -23,6 +29,7 @@ class PurchaseService:
         )
 
         subtotal = Decimal('0')
+        seen_products = set()
 
         for item in items:
             company_product = item['company_product']
@@ -32,6 +39,17 @@ class PurchaseService:
             validate_purchase_quantity(quantity)
             amount = quantity * rate
 
+            if company_product.company_id != company.id:
+                raise ValidationException(
+                    'Selected product does not belong to selected company.'
+                )
+
+            if company_product.id in seen_products:
+                raise ValidationException(
+                    'Duplicate product in purchase.'
+                )
+            seen_products.add(company_product.id)
+            
             PurchaseItem.objects.create(
                 purchase=purchase,
                 company_product=company_product,
@@ -51,7 +69,6 @@ class PurchaseService:
 
         purchase.save()
         return purchase
-
 
     @staticmethod
     @transaction.atomic
@@ -115,7 +132,6 @@ class PurchaseService:
         purchase.save()
         return purchase
 
-
     @staticmethod
     @transaction.atomic
     def cancel_purchase(*, purchase):
@@ -139,5 +155,3 @@ class PurchaseService:
         purchase.status = PurchaseStatus.CANCELLED
         purchase.save()
         return purchase
-
-

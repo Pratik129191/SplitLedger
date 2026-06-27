@@ -1,3 +1,4 @@
+from django.db.models import Q
 from purchases.models import Purchase
 
 
@@ -12,6 +13,8 @@ class PurchaseQueryService:
 
         if search:
             queryset = queryset.filter(
-                invoice_number__icontains=search
+                Q(invoice_number__icontains=search)
+                |
+                Q(vendor__name__icontains=search)
             )
         return queryset.order_by('-created_at')

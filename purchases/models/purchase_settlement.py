@@ -22,7 +22,8 @@ class PurchaseSettlement(BaseModel):
         related_name='settlements',
     )
 
-    reference_number = models.TextField(
+    reference_number = models.CharField(
+        max_length=100,
         blank=True,
     )
 
