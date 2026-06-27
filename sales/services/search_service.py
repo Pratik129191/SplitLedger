@@ -3,8 +3,12 @@ from sales.models import MasterSale
 
 class SaleSearchService:
     @staticmethod
-    def search(*, invoice_number=None, customer=None, from_date=None, to_date=None):
-        queryset = MasterSale.objects.all()
+    def search(*, user, invoice_number=None, customer=None, from_date=None, to_date=None):
+        queryset = MasterSale.objects.select_related(
+            'customer'
+        ).filter(
+            owner=user
+        )
 
         if invoice_number:
             queryset = queryset.filter(
@@ -27,4 +31,3 @@ class SaleSearchService:
             )
 
         return queryset.order_by('-created_at')
-

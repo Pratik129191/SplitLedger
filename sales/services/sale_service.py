@@ -18,6 +18,7 @@ from sales.services import (
     SegregationService,
 )
 from inventory.services import StockService
+from products.services import ProductResolutionService
 
 
 class SaleService:
@@ -34,14 +35,23 @@ class SaleService:
             customer=customer,
             notes=notes,
         )
-        
+
         subtotal = Decimal('0')
         for item in items:
-            company_product = item['company_product']
+            company_product = ProductResolutionService.resolve_product(
+                owner=owner,
+                product_master=item['product_master'],
+                company=item.get('company'),
+            )
             quantity = Decimal(str(item['quantity']))
             validate_quantity(quantity)
             rate = company_product.selling_price
             amount = quantity * rate
+
+            if company_product.company.owner_id != owner.id:
+                raise ValidationException(
+                    'Invalid product selection.'
+                )
 
             MasterSaleItem.objects.create(
                 sale=sale,
@@ -78,7 +88,6 @@ class SaleService:
         SegregationService.generate_company_sales(sale)
         return sale
 
-
     @staticmethod
     @transaction.atomic
     def update_sale(*, sale, customer=None, notes="", items):
@@ -95,7 +104,11 @@ class SaleService:
         new_total = Decimal('0')
 
         for item in items:
-            company_product = item['company_product']
+            company_product = ProductResolutionService.resolve_product(
+                owner=sale.owner,
+                product_master=item['product_master'],
+                company=item.get('company'),
+            )
             quantity = Decimal(str(item['quantity']))
             validate_quantity(quantity)
 
@@ -120,11 +133,21 @@ class SaleService:
         subtotal = Decimal('0')
 
         for item in items:
-            company_product = item['company_product']
+            company_product = ProductResolutionService.resolve_product(
+                owner=sale.owner,
+                product_master=item['product_master'],
+                company=item.get('company'),
+            )
             quantity = Decimal(str(item['quantity']))
             validate_quantity(quantity)
             rate = company_product.selling_price
             amount = quantity * rate
+
+            if company_product.company.owner_id != sale.owner.id:
+                raise ValidationException(
+                    'Invalid product selection.'
+                )
+
             MasterSaleItem.objects.create(
                 sale=sale,
                 company_product=company_product,
@@ -152,7 +175,6 @@ class SaleService:
             sale
         )
         return sale
-
 
     @staticmethod
     @transaction.atomic
@@ -185,7 +207,3 @@ class SaleService:
             status=SaleStatus.CANCELLED
         )
         return sale
-
-
-
-

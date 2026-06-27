@@ -3,3 +3,5 @@ from .sale_service import SaleService
 from .settlement_service import SettlementService
 from .segregation_service import SegregationService
 from .search_service import SaleSearchService
+from .return_service import ReturnService
+from .report_service import ReportService

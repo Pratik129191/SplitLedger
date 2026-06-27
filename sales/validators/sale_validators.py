@@ -4,6 +4,15 @@ from core.exceptions import ValidationException
 def validate_sale_items(items):
     if not items:
         raise ValidationException('Sale must contain at least one item.')
+    cleaned = []
+    for item in items:
+        if item not in cleaned:
+            cleaned.append(item)
+
+    if len(cleaned) == 0:
+        raise ValidationException(
+            "Sale must contain at least one item."
+        )
 
 
 def validate_quantity(quantity):
@@ -14,5 +23,3 @@ def validate_quantity(quantity):
 def validate_settlement_amount(settlement_amount, total_amount):
     if settlement_amount > total_amount:
         raise ValidationException('Settlement exceeds invoice total.')
-
-

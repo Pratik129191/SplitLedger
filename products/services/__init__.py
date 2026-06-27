@@ -1,2 +1,3 @@
 from .product_service import ProductService
 from .product_query_service import ProductQueryService
+from .product_resolution_service import ProductResolutionService

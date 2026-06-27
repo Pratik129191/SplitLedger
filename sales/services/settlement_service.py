@@ -15,6 +15,11 @@ class SettlementService:
         amount = Decimal(str(amount))
         remaining_amount = (sale.total_amount - sale.returned_amount) - sale.paid_amount
 
+        if amount <= 0:
+            raise ValidationException(
+                "Settlement amount must be greater than zero."
+            )
+
         if amount > remaining_amount:
             raise ValidationException(
                 'Settlement exceeds outstanding amount.'
@@ -26,6 +31,3 @@ class SettlementService:
             reference_number=reference_number,
             remarks=remarks,
         )
-
-
-
