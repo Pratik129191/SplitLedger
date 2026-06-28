@@ -1,10 +1,323 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "layouts/app_layout.html" %}
 
-</body>
-</html>
+{% block title %}
+    Sale Details
+{% endblock %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item">
+        <a href="{% url 'core:dashboard' %}">
+            Dashboard
+        </a>
+    </li>
+
+    <li class="breadcrumb-item">
+        <a href="{% url 'sales:sale_list' %}">
+            Sales
+        </a>
+    </li>
+
+    <li class="breadcrumb-item active">
+        {{ sale.invoice_number }}
+    </li>
+{% endblock %}
+
+{% block page_content %}
+
+    {% include "components/page_header.html" with title="Sale Details" subtitle=sale.invoice_number %}
+
+    <div class="card section-card mb-4">
+
+        <div class="row g-4">
+
+            {% include "components/detail_item.html" with label="Invoice Number" value=sale.invoice_number col="col-md-4" %}
+
+            {% include "components/detail_item.html" with label="Customer" value=sale.customer|default:"Walk-in Customer" col="col-md-4" %}
+
+            {% include "components/detail_item.html" with label="Invoice Date" value=sale.created_at col="col-md-4" %}
+
+            {% include "components/detail_item.html" with label="Total Amount" value=sale.total_amount col="col-md-4" %}
+
+            {% include "components/detail_item.html" with label="Paid Amount" value=sale.paid_amount col="col-md-4" %}
+
+            {% include "components/detail_item.html" with label="Outstanding" value=sale.outstanding_amount col="col-md-4" %}
+
+            <div class="col-md-4">
+
+                <div class="detail-label">
+                    Status
+                </div>
+
+                <div class="detail-value">
+
+                    {% if sale.status == "CANCELLED" %}
+
+                        <span class="badge bg-danger">
+                        Cancelled
+                    </span>
+
+                    {% elif sale.outstanding_amount > 0 %}
+
+                        <span class="badge bg-warning">
+                        Due
+                    </span>
+
+                    {% else %}
+
+                        <span class="badge bg-success">
+                        Paid
+                    </span>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+            {% include "components/detail_item.html" with label="Notes" value=sale.notes col="col-md-12" %}
+
+        </div>
+
+    </div>
+
+    <div class="card section-card mb-4">
+
+        <div class="section-header">
+
+            <h5>
+
+                Sale Items
+
+            </h5>
+
+        </div>
+
+        <table class="table align-middle">
+
+            <thead>
+
+            <tr>
+
+                <th>Product</th>
+
+                <th>Company</th>
+
+                <th>Quantity</th>
+
+                <th>Rate</th>
+
+                <th>Total</th>
+
+            </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% for item in sale.items.all %}
+
+                <tr>
+
+                    <td>
+
+                        {{ item.product_name_snapshot }}
+
+                    </td>
+
+                    <td>
+
+                        {{ item.company_product.company.name }}
+
+                    </td>
+
+                    <td>
+
+                        {{ item.quantity }}
+
+                    </td>
+
+                    <td>
+
+                        ₹ {{ item.rate_snapshot }}
+
+                    </td>
+
+                    <td>
+
+                        ₹ {{ item.amount_snapshot }}
+
+                    </td>
+
+                </tr>
+
+            {% empty %}
+
+                <tr>
+
+                    <td
+                            colspan="5"
+                            class="text-center text-secondary">
+
+                        No sale items found.
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <div class="card section-card mb-4">
+
+        <div class="section-header">
+
+            <h5>
+
+                Generated Company Bills
+
+            </h5>
+
+        </div>
+
+        <table class="table align-middle">
+
+            <thead>
+
+            <tr>
+
+                <th>Company</th>
+
+                <th>Invoice</th>
+
+                <th>Total</th>
+
+                <th>Status</th>
+
+            </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% for company_sale in sale.company_sales.all %}
+
+                <tr>
+
+                    <td>
+
+                        {{ company_sale.company.name }}
+
+                    </td>
+
+                    <td>
+
+                        {{ company_sale.invoice_number }}
+
+                    </td>
+
+                    <td>
+
+                        ₹ {{ company_sale.total_amount }}
+
+                    </td>
+
+                    <td>
+
+                        {% if company_sale.status == "CANCELLED" %}
+
+                            <span class="badge bg-danger">
+
+                            Cancelled
+
+                        </span>
+
+                        {% else %}
+
+                            <span class="badge bg-success">
+
+                            Posted
+
+                        </span>
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+            {% empty %}
+
+                <tr>
+
+                    <td
+                            colspan="4"
+                            class="text-center text-secondary">
+
+                        No company bills generated.
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <div class="detail-actions">
+
+        {% if sale.status != "CANCELLED" %}
+
+            <a
+                    href="{% url 'sales:sale_settlement' sale.id %}"
+                    class="btn btn-success">
+
+                Settlement
+
+            </a>
+
+            <a
+                    href="{% url 'sales:sale_update' sale.id %}"
+                    class="btn btn-primary">
+
+                Edit Sale
+
+            </a>
+
+            <a
+                    href="{% url 'sales:sale_return' sale.id %}"
+                    class="btn btn-warning">
+
+                Return
+
+            </a>
+
+            <a
+                    href="{% url 'sales:sale_cancel' sale.id %}"
+                    class="btn btn-danger">
+
+                Cancel Sale
+
+            </a>
+
+        {% endif %}
+
+        <a
+                href="{% url 'sales:sale_list' %}"
+                class="btn btn-light">
+
+            Back to List
+
+        </a>
+
+    </div>
+
+{% endblock %}

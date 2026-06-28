@@ -1,10 +1,325 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "layouts/app_layout.html" %}
 
-</body>
-</html>
+{% block title %}
+    Sale Settlement
+{% endblock %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item">
+        <a href="{% url 'core:dashboard' %}">
+            Dashboard
+        </a>
+    </li>
+
+    <li class="breadcrumb-item">
+        <a href="{% url 'sales:sale_list' %}">
+            Sales
+        </a>
+    </li>
+
+    <li class="breadcrumb-item">
+        <a href="{% url 'sales:sale_detail' sale.id %}">
+            {{ sale.invoice_number }}
+        </a>
+    </li>
+
+    <li class="breadcrumb-item active">
+        Settlement
+    </li>
+{% endblock %}
+
+{% block page_content %}
+
+    {% include "components/page_header.html" with title="Sale Settlement" subtitle=sale.invoice_number %}
+
+    <div class="row g-4">
+
+        <!-- Left Summary -->
+
+        <div class="col-lg-4">
+
+            <div class="card section-card">
+
+                <div class="section-header">
+
+                    <h5>
+
+                        Sale Summary
+
+                    </h5>
+
+                </div>
+
+                <div class="mb-4">
+
+                    <small class="text-secondary">
+
+                        Customer
+
+                    </small>
+
+                    <h5>
+
+                        {{ sale.customer|default:"Walk-in Customer" }}
+
+                    </h5>
+
+                </div>
+
+                <div class="mb-4">
+
+                    <small class="text-secondary">
+
+                        Invoice Number
+
+                    </small>
+
+                    <h5>
+
+                        {{ sale.invoice_number }}
+
+                    </h5>
+
+                </div>
+
+                <div class="mb-4">
+
+                    <small class="text-secondary">
+
+                        Total Amount
+
+                    </small>
+
+                    <h3>
+
+                        ₹ {{ sale.total_amount }}
+
+                    </h3>
+
+                </div>
+
+                <div class="mb-4">
+
+                    <small class="text-secondary">
+
+                        Already Received
+
+                    </small>
+
+                    <h3 class="text-success">
+
+                        ₹ {{ sale.paid_amount }}
+
+                    </h3>
+
+                </div>
+
+                <div>
+
+                    <small class="text-secondary">
+
+                        Outstanding Amount
+
+                    </small>
+
+                    <h2 class="text-danger">
+
+                        ₹ {{ sale.outstanding_amount }}
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Settlement Form -->
+
+        <div class="col-lg-8">
+
+            <div class="card section-card">
+
+                <div class="section-header">
+
+                    <h5>
+
+                        Record Payment
+
+                    </h5>
+
+                </div>
+
+                <form method="post">
+
+                    {% csrf_token %}
+
+                    <div class="row g-4">
+
+                        <div class="col-md-6">
+
+                            <label class="form-label">
+
+                                Amount Received
+
+                            </label>
+
+                            {{ form.amount }}
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <label class="form-label">
+
+                                Payment Method
+
+                            </label>
+
+                            {{ form.payment_mode }}
+
+                        </div>
+
+                        <div class="col-md-12">
+
+                            <label class="form-label">
+
+                                Reference Number
+
+                            </label>
+
+                            {{ form.reference_number }}
+
+                        </div>
+
+                        <div class="col-md-12">
+
+                            <label class="form-label">
+
+                                Remarks
+
+                            </label>
+
+                            {{ form.remarks }}
+
+                        </div>
+
+                    </div>
+
+                    <hr>
+
+                    <div class="form-actions d-flex justify-content-between align-items-center">
+
+                        <a
+                                href="{% url 'sales:sale_detail' sale.id %}"
+                                class="btn btn-light">
+
+                            Cancel
+
+                        </a>
+
+                        <button
+                                type="submit"
+                                class="btn btn-success">
+
+                            Save Payment
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+            <!-- Payment History -->
+
+            <div class="card section-card mt-4">
+
+                <div class="section-header">
+
+                    <h5>
+
+                        Settlement History
+
+                    </h5>
+
+                </div>
+
+                <table class="table align-middle">
+
+                    <thead>
+
+                    <tr>
+
+                        <th>Date</th>
+
+                        <th>Amount</th>
+
+                        <th>Payment Mode</th>
+
+                        <th>Reference</th>
+
+                    </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                    {% for settlement in sale.settlements.all %}
+
+                        <tr>
+
+                            <td>
+
+                                {{ settlement.created_at }}
+
+                            </td>
+
+                            <td>
+
+                                ₹ {{ settlement.amount }}
+
+                            </td>
+
+                            <td>
+
+                                {{ settlement.payment_mode }}
+
+                            </td>
+
+                            <td>
+
+                                {{ settlement.reference_number|default:"-" }}
+
+                            </td>
+
+                        </tr>
+
+                    {% empty %}
+
+                        <tr>
+
+                            <td
+                                    colspan="4"
+                                    class="text-center text-secondary">
+
+                                No payments recorded yet.
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}

@@ -1,14 +1,138 @@
 {% extends "layouts/app_layout.html" %}
 
-{% block title %}Sales{% endblock %}
+{% block title %}
+    Sales
+{% endblock %}
 
 {% block breadcrumbs %}
-    <li class="breadcrumb-item"><a href="{% url 'core:dashboard' %}">Dashboard</a></li>
-    <li class="breadcrumb-item active">Sales</li>
+    <li class="breadcrumb-item">
+        <a href="{% url 'core:dashboard' %}">
+            Dashboard
+        </a>
+    </li>
+    <li class="breadcrumb-item active">
+        Sales
+    </li>
 {% endblock %}
 
 {% block page_content %}
+
+    {% url 'sales:sale_create' as sale_create_url %}
+
+    {% include "components/page_header.html" with title="Sales" subtitle="Manage all sales invoices" button_text="New Sale" button_url=sale_create_url %}
+
+    {% include "components/search_filter_bar.html" %}
+
     <div class="card section-card">
-        {% include "components/empty_state.html" with title="Sales Module Coming Soon" message="We are working hard to bring you the best sales management experience. Stay tuned!" %}
+
+        <table class="table align-middle">
+
+            <thead>
+            <tr>
+                <th>Invoice</th>
+                <th>Customer</th>
+                <th>Total</th>
+                <th>Paid</th>
+                <th>Outstanding</th>
+                <th>Status</th>
+                <th class="text-center">
+                    Actions
+                </th>
+            </tr>
+            </thead>
+
+            <tbody>
+
+            {% for sale in sales %}
+
+                <tr>
+
+                    <td>
+                        {{ sale.invoice_number }}
+                    </td>
+
+                    <td>
+                        {{ sale.customer|default:"Walk-in Customer" }}
+                    </td>
+
+                    <td>
+                        ₹ {{ sale.total_amount }}
+                    </td>
+
+                    <td>
+                        ₹ {{ sale.paid_amount }}
+                    </td>
+
+                    <td>
+                        ₹ {{ sale.outstanding_amount }}
+                    </td>
+
+                    <td>
+
+                        {% if sale.status == "CANCELLED" %}
+
+                            <span class="badge bg-danger">
+                            Cancelled
+                        </span>
+
+                        {% elif sale.outstanding_amount > 0 %}
+
+                            <span class="badge bg-warning">
+                            Due
+                        </span>
+
+                        {% else %}
+
+                            <span class="badge bg-success">
+                            Paid
+                        </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td class="text-center">
+
+                        <a
+                                href="{% url 'sales:sale_detail' sale.id %}"
+                                class="btn btn-sm btn-light">
+
+                            View
+
+                        </a>
+
+                        <a
+                                href="{% url 'sales:sale_settlement' sale.id %}"
+                                class="btn btn-sm btn-outline-secondary">
+
+                            Settlement
+
+                        </a>
+
+                    </td>
+
+                </tr>
+
+            {% empty %}
+
+                <tr>
+
+                    <td
+                            colspan="7"
+                            class="text-center text-secondary">
+
+                        No sales found.
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
     </div>
+
 {% endblock %}

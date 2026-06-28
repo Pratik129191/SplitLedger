@@ -12,11 +12,9 @@ from sales.validators import (
     validate_sale_items,
     validate_quantity,
 )
-from sales.services import (
-    InvoiceNumberService,
-    SettlementService,
-    SegregationService,
-)
+from .invoice_number_service import InvoiceNumberService
+from .settlement_service import SettlementService
+from .segregation_service import SegregationService
 from inventory.services import StockService
 from products.services import ProductResolutionService
 

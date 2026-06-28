@@ -1,10 +1,253 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "layouts/app_layout.html" %}
 
-</body>
-</html>
+{% block title %}
+    Sale Return
+{% endblock %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item">
+        <a href="{% url 'core:dashboard' %}">
+            Dashboard
+        </a>
+    </li>
+
+    <li class="breadcrumb-item">
+        <a href="{% url 'sales:sale_list' %}">
+            Sales
+        </a>
+    </li>
+
+    <li class="breadcrumb-item">
+        <a href="{% url 'sales:sale_detail' sale.id %}">
+            {{ sale.invoice_number }}
+        </a>
+    </li>
+
+    <li class="breadcrumb-item active">
+        Return
+    </li>
+{% endblock %}
+
+{% block page_content %}
+
+    {% include "components/page_header.html" with title="Sale Return" subtitle=sale.invoice_number %}
+
+    <form method="post">
+
+        {% csrf_token %}
+
+        <!-- Sale Summary -->
+
+        <div class="card section-card mb-4">
+
+            <div class="row g-4">
+
+                {% include "components/detail_item.html" with label="Invoice Number" value=sale.invoice_number col="col-md-3" %}
+
+                {% include "components/detail_item.html" with label="Customer" value=sale.customer|default:"Walk-in Customer" col="col-md-3" %}
+
+                {% include "components/detail_item.html" with label="Invoice Date" value=sale.created_at col="col-md-3" %}
+
+                {% include "components/detail_item.html" with label="Invoice Total" value=sale.total_amount col="col-md-3" %}
+
+            </div>
+
+        </div>
+
+        <!-- Return Items -->
+
+        <div class="card section-card">
+
+            <div class="section-header">
+
+                <h5>
+
+                    Return Items
+
+                </h5>
+
+            </div>
+
+            <table class="table align-middle">
+
+                <thead>
+
+                <tr>
+
+                    <th>Product</th>
+
+                    <th>Company</th>
+
+                    <th>Sold Qty</th>
+
+                    <th>Already Returned</th>
+
+                    <th>Return Qty</th>
+
+                    <th>Amount</th>
+
+                </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for item in sale.items.all %}
+
+                    <tr>
+
+                        <td>
+
+                            {{ item.product_name_snapshot }}
+
+                        </td>
+
+                        <td>
+
+                            {{ item.company_product.company.name }}
+
+                        </td>
+
+                        <td>
+
+                            {{ item.quantity }}
+
+                        </td>
+
+                        <td>
+
+                            {{ item.returned_items.all|length }}
+
+                        </td>
+
+                        <td>
+
+                            <input
+                                    type="number"
+                                    name="return_qty_{{ item.id }}"
+                                    step="0.001"
+                                    min="0"
+                                    class="form-control">
+
+                        </td>
+
+                        <td>
+
+                            <input
+                                    type="text"
+                                    class="form-control"
+                                    placeholder="Auto"
+                                    readonly>
+
+                        </td>
+
+                    </tr>
+
+                {% empty %}
+
+                    <tr>
+
+                        <td
+                                colspan="6"
+                                class="text-center text-secondary">
+
+                            No sale items found.
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <!-- Notes -->
+
+        <div class="card section-card mt-4">
+
+            <div class="row">
+
+                <div class="col-md-12">
+
+                    <label class="form-label">
+
+                        Return Notes
+
+                    </label>
+
+                    <textarea
+                            name="notes"
+                            rows="3"
+                            class="form-control"
+                            placeholder="Reason for return..."></textarea>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Summary -->
+
+        <div class="card section-card mt-4">
+
+            <div class="row">
+
+                <div class="col-md-4 ms-auto">
+
+                    <table class="table">
+
+                        <tr>
+
+                            <th>
+
+                                Return Total
+
+                            </th>
+
+                            <td
+                                    class="text-end fw-bold">
+
+                                ₹ 0.00
+
+                            </td>
+
+                        </tr>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+            <hr>
+
+            <div class="form-actions d-flex justify-content-between align-items-center">
+
+                <a
+                        href="{% url 'sales:sale_detail' sale.id %}"
+                        class="btn btn-light">
+
+                    Cancel
+
+                </a>
+
+                <button
+                        type="submit"
+                        class="btn btn-warning">
+
+                    Process Return
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </form>
+
+{% endblock %}

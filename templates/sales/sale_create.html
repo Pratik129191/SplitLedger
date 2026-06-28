@@ -1,12 +1,333 @@
 {% extends "layouts/app_layout.html" %}
-{% block title %}Sales Management{% endblock %}
-{% block breadcrumbs %}
-    <li class="breadcrumb-item"><a href="{% url 'core:dashboard' %}">Dashboard</a></li>
-    <li class="breadcrumb-item"><a href="#">Sales</a></li>
-    <li class="breadcrumb-item active">New Sale</li>
+
+{% block title %}
+    New Sale
 {% endblock %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item">
+        <a href="{% url 'core:dashboard' %}">
+            Dashboard
+        </a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="{% url 'sales:sale_list' %}">
+            Sales
+        </a>
+    </li>
+    <li class="breadcrumb-item active">
+        New Sale
+    </li>
+{% endblock %}
+
 {% block page_content %}
-    <div class="card section-card">
-        {% include "components/empty_state.html" with title="Sale Entry Module Coming Soon" message="This feature is currently under development." %}
-    </div>
+
+    {% include "components/page_header.html" with title="New Sale" subtitle="Create a new sales invoice" %}
+
+    <form method="post">
+
+        {% csrf_token %}
+
+        <!-- Invoice Information -->
+
+        <div class="card section-card mb-4">
+
+            <div class="row g-4">
+
+                <div class="col-md-6">
+
+                    <label class="form-label">
+
+                        Customer
+
+                    </label>
+
+                    {{ form.customer }}
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <label class="form-label">
+
+                        Notes
+
+                    </label>
+
+                    {{ form.notes }}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Sale Items -->
+
+        <div class="card section-card">
+
+            <div class="section-header d-flex justify-content-between align-items-center">
+
+                <h5 class="mb-0">
+
+                    Sale Items
+
+                </h5>
+
+                <button
+                        type="button"
+                        id="add-row"
+                        class="btn btn-primary btn-sm">
+
+                    <i class="bi bi-plus-lg"></i>
+
+                    Add Item
+
+                </button>
+
+            </div>
+
+            {{ item_formset.management_form }}
+
+            <table
+                    class="table align-middle"
+                    id="sale-items-table">
+
+                <thead>
+
+                <tr>
+
+                    <th style="width:5%">
+                        #
+                    </th>
+
+                    <th style="width:34%">
+                        Product
+                    </th>
+
+                    <th style="width:18%">
+                        Company
+                    </th>
+
+                    <th style="width:10%">
+                        Quantity
+                    </th>
+
+                    <th style="width:13%">
+                        Rate
+                    </th>
+
+                    <th style="width:15%">
+                        Amount
+                    </th>
+
+                    <th style="width:5%">
+                    </th>
+
+                </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for row in item_formset %}
+
+                    <tr class="sale-row">
+
+                        <td>
+
+                            {{ forloop.counter }}
+
+                        </td>
+
+                        <td>
+
+                            {{ row.product_master }}
+
+                        </td>
+
+                        <td>
+
+                            {{ row.company }}
+
+                        </td>
+
+                        <td>
+
+                            {{ row.quantity }}
+
+                        </td>
+
+                        <td>
+
+                            <input
+                                    type="text"
+                                    class="form-control"
+                                    placeholder="Auto"
+                                    readonly>
+
+                        </td>
+
+                        <td>
+
+                            <input
+                                    type="text"
+                                    class="form-control"
+                                    placeholder="Auto"
+                                    readonly>
+
+                        </td>
+
+                        <td class="text-center">
+
+                            {% if row.DELETE %}
+                                {{ row.DELETE }}
+                            {% endif %}
+
+                            <button
+                                    type="button"
+                                    class="btn btn-sm btn-outline-danger remove-row">
+
+                                <i class="bi bi-trash"></i>
+
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                {% empty %}
+
+                    <tr>
+
+                        <td>
+                            1
+                        </td>
+
+                        <td>
+                            Product row will appear here.
+                        </td>
+
+                        <td>
+                            —
+                        </td>
+
+                        <td>
+                            —
+                        </td>
+
+                        <td>
+                            —
+                        </td>
+
+                        <td>
+                            —
+                        </td>
+
+                        <td>
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <!-- Totals -->
+
+        <div class="card section-card mt-4">
+
+            <div class="row">
+
+                <div class="col-md-4 ms-auto">
+
+                    <table class="table">
+
+                        <tr>
+
+                            <th>
+
+                                Subtotal
+
+                            </th>
+
+                            <td
+                                    class="text-end"
+                                    id="subtotal">
+
+                                ₹ 0.00
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <th>
+
+                                Paid
+
+                            </th>
+
+                            <td class="text-end">
+
+                                ₹ 0.00
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <th>
+
+                                Outstanding
+
+                            </th>
+
+                            <td
+                                    class="text-end fw-bold">
+
+                                ₹ 0.00
+
+                            </td>
+
+                        </tr>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+            <hr>
+
+            <div class="form-actions d-flex justify-content-between align-items-center">
+
+                <a
+                        href="{% url 'sales:sale_list' %}"
+                        class="btn btn-light">
+
+                    Cancel
+
+                </a>
+
+                <button
+                        type="submit"
+                        class="btn btn-primary">
+
+                    Save Sale
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </form>
+
 {% endblock %}

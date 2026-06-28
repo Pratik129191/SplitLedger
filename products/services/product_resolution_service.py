@@ -49,3 +49,16 @@ class ProductResolutionService:
         raise ValidationException(
             'Multiple company, selection required.'
         )
+
+    @staticmethod
+    def get_available_companies(*, owner, product_master):
+        company_products = CompanyProduct.objects.select_related(
+            'company',
+        ).filter(
+            product_master=product_master,
+            company__owner=owner,
+            company__is_active=True,
+            is_active=True
+        )
+
+        return company_products

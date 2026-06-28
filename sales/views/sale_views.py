@@ -83,7 +83,7 @@ def sale_create_view(request):
 
     return render(
         request,
-        'sales/sale_form.html',
+        'sales/sale_create.html',
         {
             'form': form,
             'item_formset': item_formset,
@@ -196,7 +196,7 @@ def sale_update_view(request, pk):
                 )
     return render(
         request,
-        "sales/sale_form.html",
+        "sales/sale_create.html",
         {
             "form": form,
             "item_formset": item_formset,

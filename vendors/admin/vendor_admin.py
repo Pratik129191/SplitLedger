@@ -13,11 +13,11 @@ class VendorAdmin(admin.ModelAdmin):
     )
 
     list_filter = (
-        'is_active'
+        'is_active',
     )
 
     ordering = (
-        'name'
+        'name',
     )
 
     search_fields = (
